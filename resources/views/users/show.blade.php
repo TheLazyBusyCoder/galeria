@@ -13,7 +13,14 @@
             @endif
         </p>
 
-        <a href="{{ url()->previous() }}">⬅ Back</a>
+        @php
+            $previous = url()->previous();
+            $current = url()->current();
+        @endphp
+
+        <a href="{{ $previous !== $current ? $previous : route('feed.index') }}">
+            ⬅ Back
+        </a>
 
         {{-- Follow / Unfollow button --}}
         @auth
@@ -49,7 +56,13 @@
                         <small>{{ $photo->caption }}</small><br>
                     @endif
                     
-                    <small>{{ $photo->likes_count }} likes</small>
+                    <form action="{{ route('photos.like', $photo->id) }}" method="POST">
+                        @csrf
+                        <div>
+                            <small>{{ $photo->likes_count }} likes</small>
+                            <button type="submit">Like</button>
+                        </div>
+                    </form>
                 </td>
 
                 @if(($index + 1) % 5 == 0)

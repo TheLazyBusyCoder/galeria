@@ -41,7 +41,6 @@
                         </small>
                     </p>
 
-
                     <form action="{{ route('photos.like', $photo->id) }}" method="POST">
                         @csrf
                         <div>
@@ -49,6 +48,33 @@
                             <button type="submit">Like</button>
                         </div>
                     </form>
+
+                    <form action="{{ route('photos.comment', $photo->id) }}" method="POST">
+                        @csrf
+                        <div>
+                            <input type="text" name="content" placeholder="Add a comment..." maxlength="255" required>
+                            <button type="submit">Post</button>
+                        </div>
+                    </form>
+
+                    @if($photo->comments->count())
+                        <table >
+                            @foreach($photo->comments->reverse() as $comment)
+                                <tr>
+                                    <td>
+                                        @if($comment->user->profile_picture)
+                                            <img src="{{ asset('storage/' . $comment->user->profile_picture) }}" 
+                                                alt="User Pic" width="20" height="20">
+                                        @else
+                                            <img src="https://via.placeholder.com/20" alt="User Pic">
+                                        @endif
+                                    </td>
+                                    <td><strong>{{ $comment->user->name }}:</strong></td>
+                                    <td>{{ $comment->content }}</td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    @endif
 
                 </td>
 
