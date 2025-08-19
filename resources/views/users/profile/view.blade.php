@@ -18,6 +18,15 @@
                 <b>Name:</b> {{ $user->name }} <br>
                 <b>Email:</b> {{ $user->email }} <br><br>
 
+                {{-- Followers / Following counts --}}
+                <a href="{{ route('profile.followers', $user->id) }}">
+                    <b>{{ $user->followers()->count() }}</b> Followers
+                </a> | 
+                <a href="{{ route('profile.following', $user->id) }}">
+                    <b>{{ $user->followings()->count() }}</b> Following
+                </a>
+                <br><br>
+
                 <a href="{{ route('profile.edit') }}">Edit Profile</a> <br><br>
 
                 <form method="POST" action="/logout">
@@ -30,30 +39,10 @@
 
     <br>
 
-    <h2 align="center">Your Pictures</h2>
     <div align="center">
         <a href="{{ route('photos.index') }}">📸 View Your Photos</a> | 
-        <a href="{{ route('photos.create') }}">⬆️ Upload a New Photo</a>
+        <a href="{{ route('photos.create') }}">⬆️ Upload a New Photo</a> | <a href="{{ route('feed.index') }}">🔍 Feed</a>
     </div>
 
-    <h2 align="center">Feed</h2>
-    <div align="center">
-        <a href="{{ route('feed.index') }}">Feed</a>
-    </div>
 </body>
 </html>
-
-{{-- <h3>Photo Grid</h3>
-    <table>
-        <tr>
-        @foreach($photos as $index => $photo)
-            <td>
-                <img src="{{ asset('storage/' . $photo->image_path) }}" alt="Photo" width="100" height="100">
-            </td>
-
-            @if(($index + 1) % 3 == 0)
-                </tr><tr>
-            @endif
-        @endforeach
-        </tr>
-    </table> --}}

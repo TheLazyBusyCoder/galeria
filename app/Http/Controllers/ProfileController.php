@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -40,6 +41,26 @@ class ProfileController extends Controller
 
         $user->save();
 
-        return redirect()->route('profile')->with('success', 'Profile updated!');
+        return redirect()->route('profile.view')->with('success', 'Profile updated!');
+    }
+
+    public function following($id)
+    {
+        $user = User::findOrFail($id);
+
+        // Directly get the users this user follows (they are already User models)
+        $followings = $user->followings()->get();
+
+        return view('users.profile.following', compact('user', 'followings'));
+    }
+
+    public function followers($id)
+    {
+        $user = User::findOrFail($id);
+
+        // Directly get the users who follow this user
+        $followers = $user->followers()->get();
+
+        return view('users.profile.followers', compact('user', 'followers'));
     }
 }

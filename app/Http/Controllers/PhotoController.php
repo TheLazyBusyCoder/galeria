@@ -44,4 +44,17 @@ class PhotoController extends Controller
 
         return redirect()->route('photos.index')->with('success', 'Photo uploaded!');
     }
+
+    public function destroy($id)
+    {
+        $photo = PhotoModel::findOrFail($id);
+
+        // Delete file from storage
+        \Illuminate\Support\Facades\Storage::delete('public/' . $photo->image_path);
+
+        // Delete from DB
+        $photo->delete();
+
+        return redirect()->route('photos.index')->with('success', 'Photo deleted successfully!');
+    }
 }

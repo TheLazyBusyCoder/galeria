@@ -14,31 +14,42 @@
         <table border="0" cellpadding="10" cellspacing="0" align="center">
             <tr>
             @foreach($photos as $index => $photo)
-                <td align="center" valign="top">
+                <td align="center" valign="top" >
+                    <p>
+                        <a href="{{ asset('storage/' . $photo->image_path) }}" target="_blank">
+                            <img src="{{ asset('storage/' . $photo->image_path) }}" alt="Photo" width="120" height="120">
+                        </a>
+                    </p>
+
+                    @if($photo->caption)
+                    
+                        <p><small>{{ $photo->caption }}</small></p>
+                    @endif
+
                     <p>
                         @if($photo->user->profile_picture)
                             <img src="{{ asset('storage/' . $photo->user->profile_picture) }}" alt="User Pic" width="30" height="30">
                         @else
-                            <img src="https://via.placeholder.com/30" alt="User Pic">
+                            <a href="https://via.placeholder.com/30" target="_blank">
+                                <img src="https://via.placeholder.com/30" alt="User Pic">
+                            </a>
                         @endif
-                        <br>
-                        <small><strong>{{ $photo->user->name }}</strong></small>
+                        <small>
+                            <strong>
+                                <a href="{{ route('users.show', $photo->user->username) }}">{{ $photo->user->name }}</a>
+                            </strong>
+                        </small>
                     </p>
 
-                    <p>
-                        <img src="{{ asset('storage/' . $photo->image_path) }}" alt="Photo" width="120" height="120">
-                    </p>
-
-                    @if($photo->caption)
-                        <p><small>{{ $photo->caption }}</small></p>
-                    @endif
 
                     <form action="{{ route('photos.like', $photo->id) }}" method="POST">
                         @csrf
-                        <button type="submit">Like</button>
+                        <div>
+                            <small>{{ $photo->likes_count }} likes</small>
+                            <button type="submit">Like</button>
+                        </div>
                     </form>
 
-                    <p><small>{{ $photo->likes_count }} likes</small></p>
                 </td>
 
                 @if(($index + 1) % 8 == 0)

@@ -23,7 +23,16 @@
                          width="150" height="150" 
                          style="border:1px solid #ccc; border-radius:5px;"><br><br>
                     <small><b>{{ $photo->caption }}</b></small><br>
-                    <small>❤️ Likes: {{ $photo->likes_count }}</small>
+                    <small>❤️ Likes: {{ $photo->likes_count }}</small><br><br>
+
+                    {{-- Delete Button --}}
+                    <form action="{{ route('photos.destroy', $photo->id) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" onclick="return confirm('Are you sure you want to delete this photo?')">
+                            🗑️ Delete
+                        </button>
+                    </form>
                 </td>
 
                 @if(($index + 1) % 8 == 0)
