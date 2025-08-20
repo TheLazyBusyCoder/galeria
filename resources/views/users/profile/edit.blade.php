@@ -1,47 +1,48 @@
-<!DOCTYPE html>
-<html>
-<head><title>Edit Profile</title></head>
-<body>
-    <h1 align="center">Edit Profile</h1>
+@extends('layouts.user-layout')
 
-    <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
-        @csrf
-        <table border="1" cellpadding="10" cellspacing="0" align="center">
-            <tr>
-                <td align="center" valign="top" width="200">
-                    @if($user->profile_picture)
-                        <img src="{{ asset('storage/' . $user->profile_picture) }}" 
-                             alt="Profile Picture" width="120" height="120"><br>
-                        <small>Current Picture</small>
-                    @else
-                        <p>No profile picture uploaded</p>
-                    @endif
+@section('css')
+<style>
+    .heading {
+        margin-bottom: 1.5rem;
+        color: var(--color-primary);
+    }
 
-                    <p>
-                        <label><b>Change Picture:</b></label><br>
-                        <input type="file" name="profile_picture">
-                    </p>
-                </td>
+    .text {
+        margin-top: 1rem;
+        color: var(--color-text-muted);
+        font-size: 0.9rem;
+    }
+</style>
+@endsection
 
-                <td valign="top">
-                    <p>
-                        <label><b>Name:</b></label><br>
-                        <input type="text" name="name" value="{{ old('name', $user->name) }}" required>
-                    </p>
-                    <p>
-                        <label><b>Email:</b></label><br>
-                        <input type="email" name="email" value="{{ old('email', $user->email) }}" required>
-                    </p>
+@section('main')
+    <div class="container">
+        <div class="card">
+            <h1 class="heading">Edit Profile</h1>
 
-                    <p>
-                        <button type="submit">Update Profile</button>
-                    </p>
-                    <p>
-                        <a href="{{ route('profile.view') }}">⬅ Back to Profile</a>
-                    </p>
-                </td>
-            </tr>
-        </table>
-    </form>
-</body>
-</html>
+            <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
+                @csrf
+
+                @if($user->profile_picture)
+                    <img src="{{ asset('storage/' . $user->profile_picture) }}" 
+                        alt="Profile Picture" width="100" height="100">
+                    <small style="display:block;text-align:center;">Current Picture</small>
+                @else
+                    <p style="text-align:center;">No profile picture uploaded</p>
+                @endif
+
+                <input type="file" name="profile_picture" style="margin-top: 10px;">
+
+                <input placeholder="Name" type="text" name="name"  style="margin-top: 10px;" value="{{ old('name', $user->name) }}" required>
+
+                <input placeholder="Email" type="email" name="email" style="margin-top: 10px;"  value="{{ old('email', $user->email) }}">
+
+                <div>
+                    <button type="submit">Update Profile</button>
+                </div>
+
+                <a href="{{ route('profile.view') }}">Back to Profile</a>
+            </form>
+        </div>
+    </div>
+@endsection

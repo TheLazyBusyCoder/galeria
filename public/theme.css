@@ -1,0 +1,208 @@
+/* Hide scrollbar */
+
+/* For WebKit-based browsers (Chrome, Safari) */
+body {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  overflow: auto;
+}
+
+body::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
+}
+
+* {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE 10+ */
+}
+
+*::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
+}
+
+:root {
+  /* Brand / Identity */
+  --color-primary: #3f729b;   /* Old Instagram blue */
+  --color-secondary: #bc2a8d; /* Pinkish accent */
+  --color-accent: #fccc63;    /* Warm yellow highlight */
+  --color-tertiary: #cd486b;  /* Vintage magenta/red */
+
+  /* Backgrounds */
+  --color-bg: #fafafa;        /* App background */
+  --color-surface: #ffffff;   /* Cards / containers */
+  --color-surface-alt: #f5f5f5; /* Subtle contrast */
+
+  /* Text */
+  --color-text: #262626;      /* Main text */
+  --color-text-muted: #8e8e8e; /* Muted/secondary text */
+  --color-text-inverse: #ffffff; /* Text on dark bg */
+
+  /* Borders / Lines */
+  --color-border: #dbdbdb;
+  --color-divider: #efefef;   /* Softer divider */
+
+  /* Feedback / States */
+  --color-success: #27ae60;   /* Green success */
+  --color-warning: #f39c12;   /* Amber warning */
+  --color-error: #e74c3c;     /* Red error */
+  --color-info: #3498db;      /* Calm info */
+
+  /* Extras */
+  --color-overlay: rgba(0, 0, 0, 0.4);  /* For modals */
+  --color-shadow: rgba(0, 0, 0, 0.15);  /* Default shadow */
+  --color-highlight: rgba(255, 229, 127, 0.6); /* Text highlight */
+}
+
+[data-theme="dark"] {
+  /* Brand / Identity */
+  --color-primary: #8ab4f8;
+  --color-secondary: #e39ab8;
+  --color-accent: #ffd479;
+  --color-tertiary: #f28b82;
+
+  /* Backgrounds */
+  --color-bg: #121212;
+  --color-surface: #1e1e1e;
+  --color-surface-alt: #242424;
+
+  /* Text */
+  --color-text: #e0e0e0;
+  --color-text-muted: #a0a0a0;
+  --color-text-inverse: #000000;
+
+  /* Borders / Lines */
+  --color-border: #333333;
+  --color-divider: #2a2a2a;
+
+  /* Feedback / States */
+  --color-success: #2ecc71;
+  --color-warning: #f1c40f;
+  --color-error: #ff6b6b;
+  --color-info: #4da6ff;
+
+  /* Extras */
+  --color-overlay: rgba(0, 0, 0, 0.6);
+  --color-shadow: rgba(0, 0, 0, 0.5);
+  --color-highlight: rgba(255, 229, 127, 0.3);
+}
+
+/* Optional: auto-dark mode fallback */
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #121212;
+    --color-surface: #1e1e1e;
+    --color-surface-alt: #242424;
+
+    --color-text: #e0e0e0;
+    --color-text-muted: #a0a0a0;
+    --color-text-inverse: #000000;
+
+    --color-border: #333333;
+    --color-divider: #2a2a2a;
+  }
+} */
+
+
+/* Layout */
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Layout Grid */
+.layout {
+  display: grid;
+  grid-template-rows: auto 1fr auto; /* Navbar - Content - Footer */
+  min-height: 100vh;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+/* Navbar */
+.navbar {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* Main content */
+.content {
+  background: var(--color-surface);
+}
+
+/* ########################## */
+/* COMPONENTS */
+/* ######################### */
+
+/* Inputs */
+
+input {
+    width: 100%;
+    padding: 0.6rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    background: var(--color-surface-alt);
+    color: var(--color-text);
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 4px var(--color-shadow);
+}
+
+/* Buttons */
+
+button {
+    width: 100%;
+    padding: 0.75rem;
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background: var(--color-secondary);
+}
+
+/* CONTAINERS */
+.container {
+    min-height:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--color-bg);
+}
+
+/* Cards */
+.card {
+    background: var(--color-surface);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px var(--color-shadow);
+    width: 100%;
+    max-width: 360px;
+    text-align: center;
+}
+
+/* Links */
+.link {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.link:hover {
+    text-decoration: underline;
+}

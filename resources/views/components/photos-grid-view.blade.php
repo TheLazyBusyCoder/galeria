@@ -1,87 +1,57 @@
-@props(['photos' ])
+@props(['photos'])
+
 @if($photos->count())
-    <table border="1" cellspacing="0" align="center" cellpadding="10">
-        <tr>
-        @foreach($photos as $index => $photo)
+<div class="photo-grid">
+    @foreach($photos as $photo)
+        <div class="photo-card">
 
-            <td align="center" valign="top" >
-                <!-- Photo -->
-                <p>
-                    <a href="{{route('photos.view' , ['photo_id' => $photo->id])}}">
-                        <img src="{{ asset('storage/' . $photo->image_path) }}" alt="Photo" width="120" height="120">
-                    </a>
+            <!-- Photo -->
+            <a href="{{ route('photos.view', ['photo_id' => $photo->id]) }}">
+                <img src="{{ asset('storage/' . $photo->image_path) }}" 
+                     alt="Photo" class="photo-img">
+            </a>
+
+            <!-- Caption -->
+            @if($photo->caption)
+                <p class="caption">
+                    {{ $photo->caption }} 
+                    <span class="timestamp">
+                        • {{ $photo->created_at->setTimezone('Asia/Kolkata')->diffForHumans() }}
+                    </span>
                 </p>
-
-                <!-- Caption -->
-                @if($photo->caption)
-                    <p><small>{{ $photo->caption }} - {{ $photo->created_at->setTimezone('Asia/Kolkata')->diffForHumans() }}</small></p>
-                @endif
-
-                <!-- Posted by + Timestamp -->
-                <p>
-                    @if($photo->user->profile_picture)
-                        <img src="{{ asset('storage/' . $photo->user->profile_picture) }}" alt="User Pic" width="30" height="30">
-                    @else
-                        <img src="https://via.placeholder.com/30" alt="User Pic">
-                    @endif
-
-                    <small>
-                        <strong>
-                            <a href="{{ route('users.show', $photo->user->username) }}">{{ $photo->user->name }}</a>
-                        </strong>
-                    </small>
-                    <br>
-                </p>
-
-                <!-- Likes -->
-                <form action="{{ route('photos.like', $photo->id) }}" method="POST">
-                    @csrf
-                    <div>
-                        <small>{{ $photo->likes_count }} likes</small>
-                        <button type="submit">Like</button>
-                    </div>
-                </form>
-
-                <!-- Comment Form -->
-                <form action="{{ route('photos.comment', $photo->id) }}" method="POST">
-                    @csrf
-                    <div>
-                        <textarea name="content" required placeholder="Type something"></textarea>
-                        <button type="submit">Post</button>
-                    </div>
-                </form>
-
-                <!-- Comments -->
-                @if($photo->comments->count())
-                    <table border="0" width="100%">
-                        @foreach($photo->comments->reverse() as $comment)
-                            <tr valign="top">
-                                <td width="25">
-                                    @if($comment->user->profile_picture)
-                                        <img src="{{ asset('storage/' . $comment->user->profile_picture) }}" 
-                                                alt="User Pic" width="20" height="20">
-                                    @else
-                                        <img src="https://via.placeholder.com/20" alt="User Pic">
-                                    @endif
-                                </td>
-                                <td>
-                                    <strong>{{ $comment->user->name }}</strong> 
-                                    {{ $comment->content }} 
-                                    - <small>{{ $comment->created_at->setTimezone('Asia/Kolkata')->diffForHumans() }}</small>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </table>
-                @endif
-
-            </td>
-
-            @if(($index + 1) % 4 == 0)
-                </tr><tr>
             @endif
-        @endforeach
-        </tr>
-    </table>
+
+            <!-- User -->
+            <div class="photo-user">
+                @if($photo->user->profile_picture)
+                    <img src="{{ asset('storage/' . $photo->user->profile_picture) }}" 
+                         alt="User Pic" class="user-pic">
+                @else
+                    <img src="https://via.placeholder.com/30" alt="User Pic" class="user-pic">
+                @endif
+
+                <a href="{{ route('users.show', $photo->user->username) }}" class="username">
+                    {{ $photo->user->name }}
+                </a>
+            </div>
+
+            <!-- Likes + Comments -->
+            <div class="photo-meta">
+                <span>{{ $photo->likes_count }} likes</span>
+                <span>{{ $photo->comments->count() }} comments</span>
+            </div>
+
+            <!-- Like Form -->
+            {{-- <form action="{{ route('photos.like', $photo->id) }}" method="POST">
+                @csrf
+                <button type="submit" class="btn">View</button>
+            </form>
+
+            <a href="{{route('photos.view' , $photo->id)}}" class="link">View</a> --}}
+
+        </div>
+    @endforeach
+</div>
 @else
-    <p align="center">No photos yet.</p>
+    <p class="no-photos">No photos yet.</p>
 @endif

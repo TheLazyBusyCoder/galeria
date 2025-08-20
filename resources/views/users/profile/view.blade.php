@@ -1,46 +1,70 @@
-
 @extends('layouts.user-layout')
 
-@section('main')
-<main>
+@section('css')
+    <link rel="stylesheet" href="{{ asset('css/photos-grid.css') }}">
+    <style>
+        .profile-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 2rem;
+            padding: 1.5rem;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+        }
 
-    <table border="1" cellpadding="10" cellspacing="0" align="center">
-        <tr>
-            <td align="center" valign="middle">
-                @if($user->profile_picture)
-                    <img src="{{ asset('storage/' . $user->profile_picture) }}" 
-                         width="120" height="120" alt="Profile Picture">
-                @else
-                    <p>No profile picture uploaded</p>
-                @endif
-            </td>
-            <td valign="top">
-                <b>Name:</b> {{ $user->name }} <br>
-                <b>Email:</b> {{ $user->email }} <br><br>
+        .profile-picture img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--color-border);
+        }
 
-                {{-- Followers / Following counts --}}
-                <a href="{{ route('profile.followers', $user->id) }}">
-                    <b>{{ $user->followers()->count() }}</b> Followers
-                </a> | 
-                <a href="{{ route('profile.following', $user->id) }}">
-                    <b>{{ $user->followings()->count() }}</b> Following
-                </a>
-                <br><br>
+        .profile-info p {
+            margin: 0.5rem 0;
+        }
 
-                <a href="{{ route('profile.edit') }}">Edit Profile</a> <br><br>
+        .profile-stats {
+            margin: 1rem 0;
+            display: flex;
+            gap: 1.5rem;
+        }
 
-                <form method="POST" action="/logout">
-                    @csrf
-                    <button type="submit">Logout</button>
-                </form>
-            </td>
-        </tr>
-    </table>
-
-    <br>
-
-    <x-photos-grid-view :photos="$photos" />
-
-</main>
+        .profile-stats a {
+            color: var(--color-text);
+            text-decoration: none;
+        }
+    </style>
 @endsection
 
+@section('main')
+<div class="profile">
+    <div class="profile-header">
+        <div class="profile-picture">
+            @if($user->profile_picture)
+                <img src="{{ asset('storage/' . $user->profile_picture) }}" alt="Profile Picture">
+            @else
+                <p>No profile picture uploaded</p>
+            @endif
+        </div>
+        <div class="profile-info">
+            <p><strong>Name:</strong> {{ $user->name }}</p>
+            <p><strong>Email:</strong> {{ $user->email }}</p>
+
+            <div class="profile-stats">
+                <a href="{{ route('profile.followers', $user->id) }}">
+                    <strong>{{ $user->followers()->count() }}</strong> Followers
+                </a>
+                <a href="{{ route('profile.following', $user->id) }}">
+                    <strong>{{ $user->followings()->count() }}</strong> Following
+                </a>
+            </div>
+
+            <a href="{{ route('profile.edit') }}" class="link">Edit Profile</a>
+        </div>
+    </div>
+    <x-photos-grid-view :photos="$photos" />
+</div>
+@endsection
