@@ -1,9 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head><title>Upload Photo</title></head>
-<body>
-    <h1 align="center">Upload New Photo</h1>
 
+@extends('layouts.user-layout')
+@section('main')
+<main>
     <form method="POST" action="{{ route('photos.store') }}" enctype="multipart/form-data">
         @csrf
         <table border="1" cellpadding="10" cellspacing="0" align="center">
@@ -22,13 +20,10 @@
                     <p align="center">
                         <button type="submit">📤 Upload</button>
                     </p>
-
-                    <p align="center">
-                        <a href="{{ route('photos.index') }}">⬅ Back to Photos</a>
-                    </p>
                 </td>
             </tr>
         </table>
     </form>
-</body>
-</html>
+</main>    
+@endsection
+

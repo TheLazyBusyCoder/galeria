@@ -11,8 +11,8 @@ class ProfileController extends Controller
     public function index()
     {
         $user = Auth::user();
-        // $photos = $user->photos()->latest()->get(); // fetch user's photos
-        return view('users.profile.view', compact('user'));
+        $photos = $user->photos()->withCount('likes')->latest()->get(); // fetch user's photos
+        return view('users.profile.view', compact('user' , 'photos'));
     }
 
     public function edit()

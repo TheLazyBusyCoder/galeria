@@ -8,9 +8,13 @@ use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
+    if(Auth::check()) {
+        return redirect()->route('profile.view');
+    }
     return redirect()->route('signup');
 });
 
@@ -30,6 +34,7 @@ Route::middleware('auth')->group(function () {
 
     // Photos
     Route::get('/photos', [PhotoController::class, 'index'])->name('photos.index'); // list all user photos
+    Route::get('/photo/{photo_id}', [PhotoController::class, 'view'])->name('photos.view'); // see a post
     Route::get('/photos/upload', [PhotoController::class, 'create'])->name('photos.create'); // show upload form
     Route::post('/photos', [PhotoController::class, 'store'])->name('photos.store'); // save upload
     Route::delete('/photos/{id}', [PhotoController::class, 'destroy'])->name('photos.destroy');
@@ -38,7 +43,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/feed', [FeedController::class, 'index'])->name('feed.index'); // show feed page
     Route::post('/photos/{photo}/like', [LikeController::class, 'store'])->name('photos.like'); // like a photo
     Route::delete('/photos/{photo}/like', [LikeController::class, 'destroy'])->name('photos.unlike'); // unlike photo
-
     Route::post('/photos/{photo}/comments', [CommentController::class, 'store'])->name('photos.comment'); // add comment
 
     // Follow / Unfollow

@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head><title>Your Photos</title></head>
-<body>
-    <h1 align="center">📸 Your Photos</h1>
+@extends('layouts.user-layout')
 
-    <p align="center">
-        <a href="{{ route('photos.create') }}">➕ Upload New Photo</a>
-    </p>
+@section('main')
+<main>
 
     @if(session('success'))
         <p align="center" style="color: green; font-weight: bold;">
@@ -18,10 +13,10 @@
         <table border="1" cellpadding="10" cellspacing="0" align="center">
             <tr>
             @foreach($photos as $index => $photo)
-                <td align="center" style="padding:15px;">
+                <td align="center" >
                     <img src="{{ asset('storage/' . $photo->image_path) }}" 
-                         width="150" height="150" 
-                         style="border:1px solid #ccc; border-radius:5px;"><br><br>
+                        width="150" height="150" 
+                        style="border:1px solid #ccc; border-radius:5px;"><br><br>
                     <small><b>{{ $photo->caption }}</b></small><br>
                     <small>❤️ Likes: {{ $photo->likes_count }}</small><br><br>
 
@@ -33,6 +28,25 @@
                             🗑️ Delete
                         </button>
                     </form>
+
+                    @if($photo->comments->count())
+                        <table >
+                            @foreach($photo->comments->reverse() as $comment)
+                                <tr>
+                                    <td>
+                                        @if($comment->user->profile_picture)
+                                            <img src="{{ asset('storage/' . $comment->user->profile_picture) }}" 
+                                                alt="User Pic" width="20" height="20">
+                                        @else
+                                            <img src="https://via.placeholder.com/20" alt="User Pic">
+                                        @endif
+                                    </td>
+                                    <td><strong>{{ $comment->user->name }}:</strong></td>
+                                    <td>{{ $comment->content }}</td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    @endif
                 </td>
 
                 @if(($index + 1) % 8 == 0)
@@ -44,9 +58,5 @@
     @else
         <p align="center"><i>No photos uploaded yet.</i></p>
     @endif
-
-    <p align="center">
-        <a href="{{ route('profile.view') }}">⬅ Back to Profile</a>
-    </p>
-</body>
-</html>
+</main>
+@endsection

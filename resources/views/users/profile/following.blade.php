@@ -1,7 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head><title>{{ $user->name }} - Following</title></head>
-<body>
+@extends('layouts.user-layout')
+
+@section('main')
+<main>
     <h1 align="center">{{ $user->name }} is Following</h1>
 
     <table border="1" cellpadding="10" cellspacing="0" align="center">
@@ -34,5 +34,5 @@
     <div align="center">
         <a href="{{ route('profile.view', $user->id) }}">⬅ Back to Profile</a>
     </div>
-</body>
-</html>
+</main>
+@endsection

@@ -1,8 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head><title>Profile</title></head>
-<body>
-    <h1 align="center">Welcome, {{ $user->name }}</h1>
+
+@extends('layouts.user-layout')
+
+@section('main')
+<main>
 
     <table border="1" cellpadding="10" cellspacing="0" align="center">
         <tr>
@@ -39,10 +39,8 @@
 
     <br>
 
-    <div align="center">
-        <a href="{{ route('photos.index') }}">📸 View Your Photos</a> | 
-        <a href="{{ route('photos.create') }}">⬆️ Upload a New Photo</a> | <a href="{{ route('feed.index') }}">🔍 Feed</a>
-    </div>
+    <x-photos-grid-view :photos="$photos" />
 
-</body>
-</html>
+</main>
+@endsection
+

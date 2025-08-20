@@ -20,6 +20,11 @@ class PhotoController extends Controller
         return view('users.photos.index', compact('photos'));
     }
 
+    public function view($photo_id) {
+        $photo = PhotoModel::withCount('likes')->find($photo_id);
+        return view('users.photos.view', compact('photo'));
+    }
+
     // Show upload form
     public function create()
     {

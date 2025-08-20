@@ -1,7 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head><title>{{ $user->name }}'s Profile</title></head>
-<body>
+
+@extends('layouts.user-layout')
+
+@section('main')
+<main>
     <center>
         <h1>{{ $user->name }}</h1>
 
@@ -45,32 +46,8 @@
             <strong>{{ $user->followings()->count() }}</strong> Following
         </p>
 
-        <h2>Photos</h2>
-        <table border="0" cellpadding="10" cellspacing="0">
-            <tr>
-            @foreach($photos as $index => $photo)
-                <td align="center" valign="top">
-                    <img src="{{ Storage::url($photo->image_path) }}" alt="Photo" width="120" height="120"><br>
-                    
-                    @if($photo->caption)
-                        <small>{{ $photo->caption }}</small><br>
-                    @endif
-                    
-                    <form action="{{ route('photos.like', $photo->id) }}" method="POST">
-                        @csrf
-                        <div>
-                            <small>{{ $photo->likes_count }} likes</small>
-                            <button type="submit">Like</button>
-                        </div>
-                    </form>
-                </td>
-
-                @if(($index + 1) % 5 == 0)
-                    </tr><tr>
-                @endif
-            @endforeach
-            </tr>
-        </table>
+        <x-photos-grid-view :photos="$photos" />
     </center>
-</body>
-</html>
+</main>
+@endsection
+
