@@ -1,25 +1,6 @@
 /* Hide scrollbar */
 
 /* For WebKit-based browsers (Chrome, Safari) */
-body {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
-  overflow: auto;
-}
-
-body::-webkit-scrollbar {
-  display: none;  /* Chrome, Safari and Opera */
-}
-
-* {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none;  /* IE 10+ */
-}
-
-*::-webkit-scrollbar {
-  display: none;  /* Chrome, Safari and Opera */
-}
-
 :root {
   /* Brand / Identity */
   --color-primary: #3f729b;   /* Old Instagram blue */
@@ -104,6 +85,10 @@ body::-webkit-scrollbar {
 
 
 /* Layout */
+.layout {
+  background-color: var(--color-primary);
+}
+
 /* Reset */
 * {
   margin: 0;

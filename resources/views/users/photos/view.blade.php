@@ -1,95 +1,182 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>View</title>
-</head>
-<body>
-    <center>
-        <h1 align="center">📸 View</h1>
-        @php
-            $previous = url()->previous();
-            $current = url()->current();
-        @endphp
+@extends('layouts.user-layout')
 
-        <a align="center" href="{{ $previous !== $current ? $previous : route('feed.index') }}">
-            ⬅ Back
-        </a>
-    </center>
-    <br>
+@section('css')
+<style>
+.photo-container {
+    max-width: 1000px;
+    margin: 20px auto;
+    display: flex;
+    gap: 20px;
+    min-height: 500px;
+    padding: 15px;
+    box-shadow: 0 2px 6px var(--color-shadow);
+}
 
-    <table border="1" cellspacing="0" cellpadding="10" align="center" width="80%">
-        <tr>
-            <!-- LEFT SIDE: BIG PHOTO -->
-            <td align="center" valign="top" width="60%">
-                <a href="{{ route('photos.view' , ['photo_id' => $photo->id]) }}">
-                    <img src="{{ asset('storage/' . $photo->image_path) }}" alt="Photo" width="400" height="400">
-                </a>
+.photo-side {
+    flex: 1;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
 
-                @if($photo->caption)
-                    <p><small><i>{{ $photo->caption }}</i></small></p>
+/* Fixed container for main photo */
+.main-photo-container {
+    width: 250px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* Image inside the fixed box */
+.main-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* change to cover if you want it cropped */
+}
+
+.caption {
+    font-style: italic;
+    color: #666;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.user-info img {
+    border-radius: 50%;
+}
+
+.comments-side {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.comments {
+    flex: 1;
+    overflow-y: auto;
+    max-height: 300px;
+    width: 450px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.comment {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.comment:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.comment img {
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.comment-content small {
+    color: #888;
+    font-size: 12px;
+}
+
+.comment-form {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+}
+
+</style>
+@endsection
+
+@section('main')
+<div class="container">
+    <div class="photo-container">
+        {{-- Photo Side --}}
+        <div class="photo-side">
+
+            <div class="user-info">
+                @if($photo->user->profile_picture)
+                    <img src="{{ asset('storage/' . $photo->user->profile_picture) }}" alt="User Pic" width="40" height="40">
+                @else
+                    <img src="https://via.placeholder.com/40" alt="User Pic" width="40" height="40">
                 @endif
-            </td>
+                <strong>
+                    <a href="{{ route('users.show', $photo->user->username) }}">
+                        {{ $photo->user->name }}
+                    </a>
+                </strong>
+            </div>
 
-            <!-- RIGHT SIDE: USER INFO + INTERACTIONS -->
-            <td valign="top" width="40%">
-                <!-- USER INFO -->
+            <div class="main-photo-container">
+                <a href="{{ route('photos.view', ['photo_id' => $photo->id]) }}">
+                    <img src="{{ asset('storage/' . $photo->image_path) }}" alt="Photo" class="main-photo">
+                </a>
+            </div>
+            
+            @if($photo->caption)
+                <p class="caption">{{ $photo->caption }}</p>
+            @endif
+            
+            <form action="{{ route('photos.like', $photo->id) }}" method="POST">
+                @csrf
                 <p>
-                    @if($photo->user->profile_picture)
-                        <img src="{{ asset('storage/' . $photo->user->profile_picture) }}" 
-                             alt="User Pic" width="40" height="40">
-                    @else
-                        <img src="https://via.placeholder.com/40" alt="User Pic">
-                    @endif
-                    <strong>
-                        <a href="{{ route('users.show', $photo->user->username) }}">
-                            {{ $photo->user->name }}
-                        </a>
-                    </strong>
+                    <small>{{ $photo->likes_count }} likes</small><br>
+                    <button type="submit">Like</button>
                 </p>
+            </form>
+        </div>
 
-                <!-- LIKES -->
-                <form action="{{ route('photos.like', $photo->id) }}" method="POST">
-                    @csrf
-                    <p>
-                        <small>{{ $photo->likes_count }} likes</small><br>
-                        <button type="submit">❤️ Like</button>
-                    </p>
-                </form>
+        {{-- Comments Side --}}
+        <div class="comments-side">
+            {{-- Comments Display --}}
+            @if($photo->comments->count())
+                <div class="comments">
+                    @foreach($photo->comments->reverse() as $comment)
+                        <div class="comment">
+                            @if($comment->user->profile_picture)
+                                <img src="{{ asset('storage/' . $comment->user->profile_picture) }}" alt="User Pic" width="30" height="30">
+                            @else
+                                <img src="https://via.placeholder.com/30" alt="User Pic" width="30" height="30">
+                            @endif
+                            <div class="comment-content">
+                                <strong>{{ $comment->user->name }}</strong>
+                                <small>{{ $comment->created_at->setTimezone('Asia/Kolkata')->format('M j, g:i A') }}</small>
+                                <p>{{ $comment->content }}</p>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @else
+                <div class="comments">
+                    <p style="text-align: center; color: #888;">No comments yet. Be the first to comment!</p>
+                </div>
+            @endif
 
-                <!-- COMMENT BOX -->
+            {{-- Comment Form --}}
+            <div class="comment-form">
                 <form action="{{ route('photos.comment', $photo->id) }}" method="POST">
                     @csrf
-                    <p>
-                        <textarea name="content" required placeholder="Type something" rows="2" cols="30"></textarea><br>
-                        <button type="submit">💬 Post</button>
-                    </p>
+                    <input name="content" required placeholder="Add a comment..."  />
+                    <button type="submit">Post Comment</button>
                 </form>
-
-                <!-- COMMENTS -->
-                @if($photo->comments->count())
-                    <table border="0" width="100%">
-                        @foreach($photo->comments->reverse() as $comment)
-                            <tr valign="top">
-                                <td width="30">
-                                    @if($comment->user->profile_picture)
-                                        <img src="{{ asset('storage/' . $comment->user->profile_picture) }}" 
-                                            alt="User Pic" width="25" height="25">
-                                    @else
-                                        <img src="https://via.placeholder.com/25" alt="User Pic">
-                                    @endif
-                                </td>
-                                <td>
-                                    <strong>{{ $comment->user->name }}</strong> 
-                                    <small>🕒 {{ $comment->created_at->setTimezone('Asia/Kolkata')->format('d M Y, h:i A') }}</small><br>
-                                    {{ $comment->content }}
-                                </td>
-                            </tr>
-                        @endforeach
-                    </table>
-                @endif
-            </td>
-        </tr>
-    </table>
-
-</body>
-</html>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

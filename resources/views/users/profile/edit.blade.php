@@ -41,7 +41,6 @@
                     <button type="submit">Update Profile</button>
                 </div>
 
-                <a href="{{ route('profile.view') }}">Back to Profile</a>
             </form>
         </div>
     </div>

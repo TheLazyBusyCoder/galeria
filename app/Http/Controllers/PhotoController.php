@@ -47,7 +47,7 @@ class PhotoController extends Controller
             'caption' => $request->caption,
         ]);
 
-        return redirect()->route('photos.index')->with('success', 'Photo uploaded!');
+        return redirect()->route('profile.view')->with('success', 'Photo uploaded!');
     }
 
     public function destroy($id)

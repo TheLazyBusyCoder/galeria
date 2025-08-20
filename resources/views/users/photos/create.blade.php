@@ -1,29 +1,32 @@
-
 @extends('layouts.user-layout')
-@section('main')
-<main>
-    <form method="POST" action="{{ route('photos.store') }}" enctype="multipart/form-data">
-        @csrf
-        <table border="1" cellpadding="10" cellspacing="0" align="center">
-            <tr>
-                <td>
-                    <p>
-                        <label><b>Choose Photo:</b></label><br>
-                        <input type="file" name="image" required>
-                    </p>
 
-                    <p>
-                        <label><b>Caption:</b></label><br>
-                        <input type="text" name="caption" maxlength="255" placeholder="Write a caption (optional)">
-                    </p>
+@section('css')
+<style>
+    .heading {
+        margin-bottom: 1.5rem;
+        color: var(--color-primary);
+    }
 
-                    <p align="center">
-                        <button type="submit">📤 Upload</button>
-                    </p>
-                </td>
-            </tr>
-        </table>
-    </form>
-</main>    
+    .text {
+        margin-top: 1rem;
+        color: var(--color-text-muted);
+        font-size: 0.9rem;
+    }    
+</style>
 @endsection
 
+@section('main')
+<main class="container">
+    <div class="card">
+        <h1 class="heading">Upload Photo</h1>
+        <form method="POST" action="{{ route('photos.store') }}" enctype="multipart/form-data">
+            @csrf
+            <input type="file" name="image" required>
+
+            <input type="text" name="caption" maxlength="255" placeholder="Write a caption (optional)">
+
+            <button type="submit">Upload</button>
+        </form>
+    </div>
+</main>
+@endsection

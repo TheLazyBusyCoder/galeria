@@ -63,7 +63,7 @@
 <body>
     <div class="layout">
         <nav class="navbar">
-            <a href="{{ route('feed.index') }}" class="{{ request()->routeIs('feed.index') ? 'active' : '' }}">Feed</a>
+            <a href="{{ route('feed.index') }}" class="{{ request()->routeIs(['feed.index' , 'users.show']) ? 'active' : '' }}">Feed</a>
             <a href="{{ route('profile.view') }}" class="{{ request()->routeIs(['profile.view' , 'profile.edit']) ? 'active' : '' }}">My Profile</a>
             <a href="{{ route('photos.create') }}" class="{{ request()->routeIs('photos.create') ? 'active' : '' }}">Upload</a>
             <form action="{{ route('logout') }}" method="POST">
