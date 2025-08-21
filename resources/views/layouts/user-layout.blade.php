@@ -48,7 +48,7 @@
             font-weight: bold;
         }
     </style>
-    <style>
+    {{-- <style>
         body.loading {
             visibility: hidden;
             opacity: 0;
@@ -57,13 +57,14 @@
             visibility: visible;
             opacity: 1;
         }
-    </style>
+    </style> --}}
     @yield('css')
 </head>
 <body>
     <div class="layout">
         <nav class="navbar">
-            <a href="{{ route('feed.index') }}" class="{{ request()->routeIs(['feed.index' , 'users.show']) ? 'active' : '' }}">Feed</a>
+            <a href="{{ route('feed.index') }}" class="{{ request()->routeIs(['feed.index']) ? 'active' : '' }}">Feed</a>
+            <a href="{{ route('social.index') }}" class="{{ request()->routeIs(['social.index'  , 'users.show']) ? 'active' : '' }}">Social</a>
             <a href="{{ route('profile.view') }}" class="{{ request()->routeIs(['profile.view' , 'profile.edit']) ? 'active' : '' }}">My Profile</a>
             <a href="{{ route('photos.create') }}" class="{{ request()->routeIs('photos.create') ? 'active' : '' }}">Upload</a>
             <form action="{{ route('logout') }}" method="POST">
@@ -83,12 +84,12 @@
         @yield('js')
     </div>
 
-    <script>
+    {{-- <script>
         document.body.classList.add('loading');
         window.addEventListener('load', function() {
             document.body.classList.remove('loading');
             document.body.classList.add('loaded');
         });
-    </script>
+    </script> --}}
 </body>
 </html>

@@ -1,4 +1,8 @@
 /* Hide scrollbar */
+html , body {
+  scrollbar-gutter: stable; /* modern browsers */
+}
+
 
 /* For WebKit-based browsers (Chrome, Safari) */
 :root {
@@ -83,6 +87,9 @@
   }
 } */
 
+body {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
 
 /* Layout */
 .layout {
@@ -132,7 +139,6 @@
 input {
     width: 100%;
     padding: 0.6rem;
-    margin-bottom: 1rem;
     border: 1px solid var(--color-border);
     border-radius: 6px;
     background: var(--color-surface-alt);

@@ -21,9 +21,9 @@
         <h1 class="heading">Upload Photo</h1>
         <form method="POST" action="{{ route('photos.store') }}" enctype="multipart/form-data">
             @csrf
-            <input type="file" name="image" required>
+            <input type="file" name="image" required style="margin-bottom: 10px;">
 
-            <input type="text" name="caption" maxlength="255" placeholder="Write a caption (optional)">
+            <input type="text" name="caption" style="margin-bottom: 10px;" maxlength="255" placeholder="Write a caption (optional)">
 
             <button type="submit">Upload</button>
         </form>

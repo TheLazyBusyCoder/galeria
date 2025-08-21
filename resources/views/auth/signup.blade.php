@@ -21,10 +21,10 @@
         <h1 class="heading">Signup</h1>
         <form method="POST" action="/signup">
             @csrf
-            <input type="text" name="name" placeholder="Name" required autocomplete="off">
-            <input type="text" name="username" placeholder="Username" required autocomplete="off">
-            <input type="password" name="password" placeholder="Password" required autocomplete="off">
-            <input type="password" name="password_confirmation" placeholder="Confirm Password" required autocomplete="off">
+            <input style="margin-bottom: 10px;" type="text" name="name" placeholder="Name" required autocomplete="off">
+            <input style="margin-bottom: 10px;" type="text" name="username" placeholder="Username" required autocomplete="off">
+            <input style="margin-bottom: 10px;" type="password" name="password" placeholder="Password" required autocomplete="off">
+            <input style="margin-bottom: 10px;" type="password" name="password_confirmation" placeholder="Confirm Password" required autocomplete="off">
             <button type="submit">Signup</button>
         </form>
         <p class="text">Already have an account? <a href="/login" class="link">Login here</a></p>

@@ -21,8 +21,8 @@
         <h1 class="heading">Login</h1>
         <form method="POST" action="/login">
             @csrf
-            <input type="text" name="username" placeholder="Username" required autocomplete="off">
-            <input type="password" name="password" placeholder="Password" required autocomplete="off">
+            <input style="margin-bottom: 10px;" type="text" name="username" placeholder="Username" required autocomplete="off">
+            <input style="margin-bottom: 10px;" type="password" name="password" placeholder="Password" required autocomplete="off">
             <button type="submit">Login</button>
         </form>
         <p class="text">Don’t have an account? <a href="/signup" class="link">Signup here</a></p>

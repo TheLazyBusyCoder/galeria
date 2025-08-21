@@ -29,10 +29,12 @@ class ProfileController extends Controller
             'name' => 'required|string|max:100',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'account_type' => 'required|in:public,private',
         ]);
 
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->account_type = $request->account_type;
 
         if ($request->hasFile('profile_picture')) {
             $path = $request->file('profile_picture')->store('profiles', 'public');

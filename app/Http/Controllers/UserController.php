@@ -9,12 +9,22 @@ class UserController extends Controller
 {
     public function show($username)
     {
-        // Find user by username
         $user = User::where('username', $username)->firstOrFail();
 
-        // Load their photos with likes
-        $photos = $user->photos()->withCount('likes')->latest()->get();
+        // check if viewer is authenticated and following
+        $isFollower = false;
+        if (auth()->check()) {
+            $isFollower = $user->followers()
+                            ->where('follower_id', auth()->id())
+                            ->exists();
+        }
 
-        return view('users.show', compact('user', 'photos'));
+        // Load photos only if public OR viewer is a follower
+        $photos = collect(); // empty by default
+        if ($user->account_type === 'public' || $isFollower) {
+            $photos = $user->photos()->withCount('likes')->latest()->get();
+        }
+
+        return view('users.show', compact('user', 'photos', 'isFollower'));
     }
 }

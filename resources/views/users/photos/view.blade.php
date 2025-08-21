@@ -155,7 +155,7 @@
                                 <img src="https://via.placeholder.com/30" alt="User Pic" width="30" height="30">
                             @endif
                             <div class="comment-content">
-                                <strong>{{ $comment->user->name }}</strong>
+                                <a href="{{route('users.show' , $comment->user->username)}}"><strong>{{ $comment->user->name }}</strong></a>
                                 <small>{{ $comment->created_at->setTimezone('Asia/Kolkata')->format('M j, g:i A') }}</small>
                                 <p>{{ $comment->content }}</p>
                             </div>

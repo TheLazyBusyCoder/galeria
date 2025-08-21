@@ -13,6 +13,26 @@
         font-size: 0.9rem;
     }
 </style>
+<style>
+    .radio-group {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;              /* space between options */
+        align-items: center;
+        margin: 0.5rem 0;
+    }
+    .radio-group label {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;            /* space between circle and text */
+        font-size: 14px;
+        cursor: pointer;
+    }
+    .radio-group input[type="radio"] {
+        accent-color: #333;     /* modern browsers: color of radio */
+        cursor: pointer;
+    }
+</style>
 @endsection
 
 @section('main')
@@ -31,11 +51,26 @@
                     <p style="text-align:center;">No profile picture uploaded</p>
                 @endif
 
+                {{-- Radio button for account type --}}
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="account_type" value="private"
+                            {{ $user->account_type == 'private' ? 'checked' : '' }}>
+                        Private
+                    </label>
+
+                    <label>
+                        <input type="radio" name="account_type" value="public"
+                            {{ $user->account_type == 'public' ? 'checked' : '' }}>
+                        Public
+                    </label>
+                </div>
+
                 <input type="file" name="profile_picture" style="margin-top: 10px;">
 
                 <input placeholder="Name" type="text" name="name"  style="margin-top: 10px;" value="{{ old('name', $user->name) }}" required>
 
-                <input placeholder="Email" type="email" name="email" style="margin-top: 10px;"  value="{{ old('email', $user->email) }}">
+                <input placeholder="Email" type="email" name="email" style="margin-top: 10px; margin-bottom: 10px;"  value="{{ old('email', $user->email) }}">
 
                 <div>
                     <button type="submit">Update Profile</button>

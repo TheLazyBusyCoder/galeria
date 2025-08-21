@@ -7,6 +7,7 @@ use App\Http\Controllers\FollowController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SocialController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -44,6 +45,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/photos/{photo}/like', [LikeController::class, 'store'])->name('photos.like'); // like a photo
     Route::delete('/photos/{photo}/like', [LikeController::class, 'destroy'])->name('photos.unlike'); // unlike photo
     Route::post('/photos/{photo}/comments', [CommentController::class, 'store'])->name('photos.comment'); // add comment
+
+    // Social
+    Route::get('social' , [SocialController::class  , 'index'])->name('social.index');
 
     // Follow / Unfollow
     Route::post('/follow/{id}', [FollowController::class, 'store'])->name('follow.store');

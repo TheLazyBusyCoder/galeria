@@ -52,6 +52,7 @@
         <div class="profile-info">
             <p><strong>Name:</strong> {{ $user->name }}</p>
             <p><strong>Email:</strong> {{ $user->email }}</p>
+            <p><strong>Account:</strong> {{ ucfirst($user->account_type) }}</p>
 
             <div class="profile-stats">
                 <a href="{{ route('profile.followers', $user->id) }}">

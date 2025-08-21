@@ -54,6 +54,7 @@
         {{-- Profile Info --}}
         <div class="profile-info">
             <h1>{{ $user->name }}</h1>
+            <p>{{ucfirst($user->account_type)}} Account</p>
 
             {{-- Stats --}}
             <div class="profile-stats">
@@ -93,6 +94,12 @@
     </div>
 
     {{-- Photos Grid --}}
-    <x-photos-grid-view :photos="$photos" />
+    @if ($user->account_type === 'public' || $isFollower)
+        <x-photos-grid-view :photos="$photos" />
+    @else
+        <p style="text-align:center; color:#777; margin:1rem 0;">
+            This account is private. Follow {{ $user->name }} to see their photos.
+        </p>
+    @endif
 </div>
 @endsection
