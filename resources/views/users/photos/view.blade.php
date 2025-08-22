@@ -117,14 +117,14 @@
                     <img src="https://via.placeholder.com/40" alt="User Pic" width="40" height="40">
                 @endif
                 <strong>
-                    <a href="{{ route('users.show', $photo->user->username) }}">
+                    <a href="{{ route('users.show', $photo->user->username) }}" class="link">
                         {{ $photo->user->name }}
                     </a>
                 </strong>
             </div>
 
             <div class="main-photo-container">
-                <a href="{{ route('photos.view', ['photo_id' => $photo->id]) }}">
+                <a href="{{ route('photos.view', ['photo_id' => $photo->id]) }}" class="link">
                     <img src="{{ asset('storage/' . $photo->image_path) }}" alt="Photo" class="main-photo">
                 </a>
             </div>
@@ -155,7 +155,7 @@
                                 <img src="https://via.placeholder.com/30" alt="User Pic" width="30" height="30">
                             @endif
                             <div class="comment-content">
-                                <a href="{{route('users.show' , $comment->user->username)}}"><strong>{{ $comment->user->name }}</strong></a>
+                                <a class="link" href="{{route('users.show' , $comment->user->username)}}"><strong>{{ $comment->user->name }}</strong></a>
                                 <small>{{ $comment->created_at->setTimezone('Asia/Kolkata')->format('M j, g:i A') }}</small>
                                 <p>{{ $comment->content }}</p>
                             </div>

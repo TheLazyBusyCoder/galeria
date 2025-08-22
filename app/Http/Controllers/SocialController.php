@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SocialController extends Controller
 {
@@ -15,6 +16,7 @@ class SocialController extends Controller
                 $query->where('name', 'like', "%{$search}%")
                     ->orWhere('username', 'like', "%{$search}%");
             })
+            ->where('id' , '!=' , Auth::user()->id)
             ->latest()
             ->paginate(10)
             ->withQueryString();

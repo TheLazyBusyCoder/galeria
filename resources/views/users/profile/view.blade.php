@@ -56,10 +56,10 @@
 
             <div class="profile-stats">
                 <a href="{{ route('profile.followers', $user->id) }}">
-                    <strong>{{ $user->followers()->count() }}</strong> Followers
+                    <strong>{{ $user->followers()->where('status' , 'accepted')->count() }}</strong> Followers
                 </a>
                 <a href="{{ route('profile.following', $user->id) }}">
-                    <strong>{{ $user->followings()->count() }}</strong> Following
+                    <strong>{{ $user->followings()->where('status' , 'accepted')->count() }}</strong> Following
                 </a>
             </div>
 

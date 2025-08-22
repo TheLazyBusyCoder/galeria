@@ -140,12 +140,14 @@
                             <button class="button" type="submit">Reject</button>
                         </form>
                     @elseif($follow && $follow->status === 'accepted')
-                        <form action="{{ route('notifications.read') }}" method="POST" style="display:inline;">
-                            @csrf
-                            {{-- Mark as read --}}
-                            <input type="hidden" name="id" value="{{$notification->id}}">
-                            <button class="button" type="submit">Mark as Read</button>
-                        </form>
+                       @if (!$notification->read_at)
+                            <form action="{{ route('notifications.read') }}" method="POST" style="display:inline;">
+                                @csrf
+                                {{-- Mark as read --}}
+                                <input type="hidden" name="id" value="{{$notification->id}}">
+                                <button class="button" type="submit">Mark as Read</button>
+                            </form>
+                       @endif
                     @elseif($follow && $follow->status === 'rejected')
                         <form action="{{ route('notifications.read') }}" method="POST" style="display:inline;">
                             @csrf

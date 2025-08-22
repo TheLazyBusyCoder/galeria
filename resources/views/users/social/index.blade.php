@@ -8,14 +8,14 @@
         align-items: center;
         padding: 15px;
     }
-
     .button { 
-        width: 150px;
+        width: 50px;
         border-radius: 0;
+        padding: 5px;
     }
 
     input {
-        width: 200px;
+        width: 300px;
         border-radius: 0;
     }
 </style>
@@ -32,7 +32,7 @@
         align-items: center;
         gap: 10px;
         padding: 8px;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid var(--color-border);
     }
     .user-item img {
         width: 40px;
@@ -42,7 +42,7 @@
     }
     .user-item a {
         text-decoration: none;
-        color: #333;
+        color: var(--color-text);
         font-weight: 500;
     }
 
@@ -65,7 +65,9 @@
 <form action="" method="GET">
     <div class="filter-bar">
         <input value="{{ $search ?? '' }}" type="text" name="search" placeholder="Search users...">
-        <button class="button">Search</button>
+        <button class="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+        </button>
     </div>
 </form>
 
@@ -82,7 +84,7 @@
                 </div>
             @endif
 
-            <a href="{{ route('users.show', $user->username) }}">
+            <a  href="{{ route('users.show', $user->username) }}">
                 <strong>{{ $user->name }}</strong> <small>({{ '@'.$user->username }})</small> {{ ucfirst($user->account_type) }}
             </a>
         </div>

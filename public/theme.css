@@ -6,37 +6,60 @@ html , body {
 
 /* For WebKit-based browsers (Chrome, Safari) */
 :root {
-  /* Brand / Identity */
-  --color-primary: #3f729b;   /* Old Instagram blue */
-  --color-secondary: #bc2a8d; /* Pinkish accent */
-  --color-accent: #fccc63;    /* Warm yellow highlight */
-  --color-tertiary: #cd486b;  /* Vintage magenta/red */
+  --color-primary: #4a7ba7;   
+  --color-secondary: #b45597; 
+  --color-accent: #f6c85c;    
+  --color-tertiary: #c45b70;  
 
-  /* Backgrounds */
-  --color-bg: #fafafa;        /* App background */
-  --color-surface: #ffffff;   /* Cards / containers */
-  --color-surface-alt: #f5f5f5; /* Subtle contrast */
+  --color-bg: #f4f5f7;        
+  --color-surface: #ffffff;   
+  --color-surface-alt: #f0f0f0; 
 
-  /* Text */
-  --color-text: #262626;      /* Main text */
-  --color-text-muted: #8e8e8e; /* Muted/secondary text */
-  --color-text-inverse: #ffffff; /* Text on dark bg */
+  --color-text: #1f2933;      
+  --color-text-muted: #6b7280; 
+  --color-text-inverse: #f9fafb; 
 
-  /* Borders / Lines */
-  --color-border: #dbdbdb;
-  --color-divider: #efefef;   /* Softer divider */
+  --color-border: #d1d5db;
+  --color-divider: #e5e7eb;   
 
-  /* Feedback / States */
-  --color-success: #27ae60;   /* Green success */
-  --color-warning: #f39c12;   /* Amber warning */
-  --color-error: #e74c3c;     /* Red error */
-  --color-info: #3498db;      /* Calm info */
+  --color-success: #22a565;   
+  --color-warning: #e2a737;   
+  --color-error: #d64545;     
+  --color-info: #3b82f6;      
 
-  /* Extras */
-  --color-overlay: rgba(0, 0, 0, 0.4);  /* For modals */
-  --color-shadow: rgba(0, 0, 0, 0.15);  /* Default shadow */
-  --color-highlight: rgba(255, 229, 127, 0.6); /* Text highlight */
+  --color-overlay: rgba(0, 0, 0, 0.45);  
+  --color-shadow: rgba(0, 0, 0, 0.12);   
+  --color-highlight: rgba(255, 223, 88, 0.45); 
 }
+
+/* Optional: auto-dark mode fallback */
+/* @media (prefers-color-scheme: dark) {
+  :root {
+
+    --color-bg: #1a1d23;        
+    --color-surface: #242933;  
+    --color-surface-alt: #2f3542; 
+
+    --color-text: #e5e7eb;    
+    --color-text-muted: #9ca3af; 
+    --color-text-inverse: #f9fafb; 
+
+    
+    --color-border: #3a3f4b;
+    --color-divider: #2e323d;
+
+   
+    --color-success: #22c55e;  
+    --color-warning: #fbbf24; 
+    --color-error: #ef4444;  
+    --color-info: #3b82f6;   
+
+ 
+    --color-overlay: rgba(0, 0, 0, 0.6);  
+    --color-shadow: rgba(0, 0, 0, 0.25);
+    --color-highlight: rgba(255, 223, 88, 0.4); 
+  }
+} */
 
 [data-theme="dark"] {
   /* Brand / Identity */
@@ -70,22 +93,6 @@ html , body {
   --color-shadow: rgba(0, 0, 0, 0.5);
   --color-highlight: rgba(255, 229, 127, 0.3);
 }
-
-/* Optional: auto-dark mode fallback */
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg: #121212;
-    --color-surface: #1e1e1e;
-    --color-surface-alt: #242424;
-
-    --color-text: #e0e0e0;
-    --color-text-muted: #a0a0a0;
-    --color-text-inverse: #000000;
-
-    --color-border: #333333;
-    --color-divider: #2a2a2a;
-  }
-} */
 
 body {
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
