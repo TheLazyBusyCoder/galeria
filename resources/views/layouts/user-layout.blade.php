@@ -47,22 +47,39 @@
             color: var(--color-text-inverse);
             font-weight: bold;
         }
+
+        .navbar .nav-link {
+            position: relative;
+            display: inline-block;
+        }
+
+        .navbar .badge {
+            position: absolute;
+            top: 0;
+            right: -8px;
+            background: red;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: bold;
+            padding: 5px 8px;
+            border-radius: 50%;
+        }
     </style>
-    {{-- <style>
-        body.loading {
-            visibility: hidden;
-            opacity: 0;
-        }
-        body.loaded {
-            visibility: visible;
-            opacity: 1;
-        }
-    </style> --}}
     @yield('css')
 </head>
 <body>
     <div class="layout">
         <nav class="navbar">
+            <a href="{{ route('notifications') }}" class="nav-link {{ request()->routeIs(['notifications']) ? 'active' : '' }}">
+                Notifications
+                @php
+                    $unreadCount = auth()->user()->unreadNotifications()->count();
+                @endphp
+                @if($unreadCount > 0)
+                    <span class="badge">{{ $unreadCount }}</span>
+                @endif
+            </a>
+
             <a href="{{ route('feed.index') }}" class="{{ request()->routeIs(['feed.index']) ? 'active' : '' }}">Feed</a>
             <a href="{{ route('social.index') }}" class="{{ request()->routeIs(['social.index'  , 'users.show']) ? 'active' : '' }}">Social</a>
             <a href="{{ route('profile.view') }}" class="{{ request()->routeIs(['profile.view' , 'profile.edit']) ? 'active' : '' }}">My Profile</a>

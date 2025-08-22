@@ -172,7 +172,7 @@
             <div class="comment-form">
                 <form action="{{ route('photos.comment', $photo->id) }}" method="POST">
                     @csrf
-                    <input name="content" required placeholder="Add a comment..."  />
+                    <input name="content" style="margin-bottom: 10px;" required placeholder="Add a comment..."  />
                     <button type="submit">Post Comment</button>
                 </form>
             </div>

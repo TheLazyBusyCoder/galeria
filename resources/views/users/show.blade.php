@@ -59,10 +59,10 @@
             {{-- Stats --}}
             <div class="profile-stats">
                 <a>
-                    <strong>{{ $user->followers()->count() }}</strong> Followers
+                    <strong>{{ $user->followers()->where('status', 'accepted')->count() }}</strong> Followers
                 </a>
                 <a>
-                    <strong>{{ $user->followings()->count() }}</strong> Following
+                    <strong>{{ $user->followings()->where('status', 'accepted')->count() }}</strong> Following
                 </a>
             </div>
 
@@ -71,21 +71,35 @@
                 @php
                     $previous = url()->previous();
                     $current = url()->current();
+
+                    $authUser = Auth::user();
+                    $followRecord = null;
+
+                    if($authUser && $authUser->id !== $user->id) {
+                        $followRecord = \App\Models\Follow::where('follower_id', $authUser->id)
+                                    ->where('followed_id', $user->id)
+                                    ->first();
+                    }
                 @endphp
 
                 @auth
                     @if(Auth::id() !== $user->id) {{-- don’t show button on own profile --}}
-                        @if(Auth::user()->followings->contains($user->id))
+                        @if(!$followRecord)
+                            {{-- Not following yet --}}
+                            <form action="{{ route('follow.store', $user->id) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-follow">Follow</button>
+                            </form>
+                        @elseif($followRecord->status === 'accepted')
+                            {{-- Already following --}}
                             <form action="{{ route('follow.destroy', $user->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-unfollow">Unfollow</button>
                             </form>
-                        @else
-                            <form action="{{ route('follow.store', $user->id) }}" method="POST">
-                                @csrf
-                                <button type="submit" class="btn btn-follow">Follow</button>
-                            </form>
+                        @elseif($followRecord->status === 'pending')
+                            {{-- Request sent --}}
+                            Request Sent, Please wait
                         @endif
                     @endif
                 @endauth

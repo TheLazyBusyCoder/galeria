@@ -5,10 +5,14 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SocialController;
 use App\Http\Controllers\UserController;
+use App\Models\User;
+use App\Notifications\JsonNotification;
+use Illuminate\Notifications\Events\NotificationFailed;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -49,12 +53,119 @@ Route::middleware('auth')->group(function () {
     // Social
     Route::get('social' , [SocialController::class  , 'index'])->name('social.index');
 
+    // Notifications
+    Route::get('notifications' , [NotificationController::class , 'index'])->name('notifications');
+    Route::post('/notifications/read', [NotificationController::class, 'markRead'])->name('notifications.read');
+
     // Follow / Unfollow
     Route::post('/follow/{id}', [FollowController::class, 'store'])->name('follow.store');
     Route::delete('/unfollow/{id}', [FollowController::class, 'destroy'])->name('follow.destroy');
     Route::get('/users/{id}/followers', [ProfileController::class, 'followers'])->name('profile.followers');
     Route::get('/users/{id}/following', [ProfileController::class, 'following'])->name('profile.following');
 
+    // Accept follow request
+    Route::post('/follow/{id}/accept', [FollowController::class, 'accept'])->name('follow.accept');
+
+    // Reject follow request
+    Route::delete('/follow/{id}/reject', [FollowController::class, 'reject'])->name('follow.reject');
+
     // Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+});
+
+//////////////////////
+// Dev Routes in web.php
+//////////////////////
+
+// TODO 
+use Illuminate\Support\Carbon;
+Route::get('/todo', function () {
+    $today = Carbon::now()->toDateString();
+
+    $rows = [
+        ['task' => 'Follow Request', 'status' => 'Todo', 'description' => 'to follow someone they should be able to raise a follow request'],
+        ['task' => 'Messaging', 'status' => 'Todo', 'description' => 'add a feature for messaging in the app'],
+        ['task' => 'Sharing of Post in Messaging', 'status' => 'Todo','description' => 'users should be able to share posts in messages'],
+        ['task' => 'Follow request should be accepted if the acount is public', 'status' => 'Todo','description' => 'follow request should be accepted if the account type is public'],
+    ];
+
+    $html = "
+        <style>
+            body { font-family: Arial, sans-serif; background: #f9fafb; padding: 2rem; }
+            table { border-collapse: collapse; width: 70%; margin: auto; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden; }
+            th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #e5e7eb; }
+            th { background: #f3f4f6; font-weight: bold; }
+            tr:hover { background: #f9fafb; }
+            .status { padding: 4px 8px; border-radius: 6px; font-size: 0.85rem; font-weight: bold; }
+            .todo { background: #fee2e2; color: #991b1b; }
+            .done { background: #e9fee2ff; colorrgba(27, 153, 29, 1)1b; }
+        </style>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Task</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+    ";
+
+    foreach ($rows as $row) {
+        $html .= "
+            <tr>
+                <td>{$row['task']}</td>
+                <td>{$row['description']}</td>
+                <td><span class='status todo'>{$row['status']}</span></td>
+            </tr>
+        ";
+    }
+
+    $html .= "
+            </tbody>
+        </table>
+    ";
+
+    return $html;
+});
+
+// Send a "like" notification
+Route::get('/test-notification/like', function () {
+    $user = \App\Models\User::first(); // ✅ always exists
+    $user->notify(new \App\Notifications\JsonNotification(
+        'like',
+        'liked your photo',
+        2,
+        ['post_id' => 123]
+    ));
+    return 'Like notification sent!';
+});
+
+
+// Send a "comment" notification
+Route::get('/test-notification/comment', function () {
+    $user = User::first();
+    $from = User::find(2);
+    $user->notify(new JsonNotification(
+        type: 'comment',
+        text: ($from?->name ?? 'Someone') . ' commented on your photo',
+        fromUserId: $from?->id,
+        extra: ['post_id' => 123, 'comment_id' => 456]
+    ));
+
+    return 'Comment notification sent!';
+});
+
+// Send a "follow" notification
+Route::get('/test-notification/follow', function () {
+    $user = User::first();
+    $from = User::find(2);
+    $user->notify(new JsonNotification(
+        type: 'follow',
+        text: ($from?->name ?? 'Someone') . ' sent you a follow request',
+        fromUserId: $from?->id
+    ));
+
+    return 'Follow notification sent!';
 });
