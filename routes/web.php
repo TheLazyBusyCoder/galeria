@@ -5,6 +5,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\ProfileController;
@@ -62,12 +63,16 @@ Route::middleware('auth')->group(function () {
     Route::delete('/unfollow/{id}', [FollowController::class, 'destroy'])->name('follow.destroy');
     Route::get('/users/{id}/followers', [ProfileController::class, 'followers'])->name('profile.followers');
     Route::get('/users/{id}/following', [ProfileController::class, 'following'])->name('profile.following');
-
     // Accept follow request
     Route::post('/follow/{id}/accept', [FollowController::class, 'accept'])->name('follow.accept');
-
     // Reject follow request
     Route::delete('/follow/{id}/reject', [FollowController::class, 'reject'])->name('follow.reject');
+
+    // Show all 1:1 conversations (list of users you have chats with)
+    Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
+    Route::get('/messages/{user}', [MessageController::class, 'conversation'])->name('messages.conversation');
+    Route::post('/messages/{user}', [MessageController::class, 'send'])->name('messages.send');
+    Route::post('/messages/{message}/read', [MessageController::class, 'markRead'])->name('messages.read');
 
     // Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -83,10 +88,10 @@ Route::get('/todo', function () {
     $today = Carbon::now()->toDateString();
 
     $rows = [
-        ['task' => 'Follow Request', 'status' => 'Todo', 'description' => 'to follow someone they should be able to raise a follow request'],
+        ['task' => 'Follow Request', 'status' => 'DONE', 'description' => 'to follow someone they should be able to raise a follow request'],
         ['task' => 'Messaging', 'status' => 'Todo', 'description' => 'add a feature for messaging in the app'],
         ['task' => 'Sharing of Post in Messaging', 'status' => 'Todo','description' => 'users should be able to share posts in messages'],
-        ['task' => 'Follow request should be accepted if the acount is public', 'status' => 'Todo','description' => 'follow request should be accepted if the account type is public'],
+        ['task' => 'Follow request should be accepted if the acount is public', 'status' => 'Done','description' => 'follow request should be accepted if the account type is public'],
     ];
 
     $html = "

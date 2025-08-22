@@ -82,7 +82,8 @@
 
             <a href="{{ route('feed.index') }}" class="{{ request()->routeIs(['feed.index']) ? 'active' : '' }}">Feed</a>
             <a href="{{ route('social.index') }}" class="{{ request()->routeIs(['social.index'  , 'users.show']) ? 'active' : '' }}">Social</a>
-            <a href="{{ route('profile.view') }}" class="{{ request()->routeIs(['profile.view' , 'profile.edit']) ? 'active' : '' }}">My Profile</a>
+            <a href="{{ route('messages.index') }}" class="{{ request()->routeIs(['messages.index' , 'messages.conversation']) ? 'active' : '' }}">Inbox</a>
+            <a href="{{ route('profile.view') }}" class="{{ request()->routeIs(['profile.view' , 'profile.edit' , 'profile.followers' , 'profile.following']) ? 'active' : '' }}">My Profile</a>
             <a href="{{ route('photos.create') }}" class="{{ request()->routeIs('photos.create') ? 'active' : '' }}">Upload</a>
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
@@ -100,13 +101,5 @@
 
         @yield('js')
     </div>
-
-    {{-- <script>
-        document.body.classList.add('loading');
-        window.addEventListener('load', function() {
-            document.body.classList.remove('loading');
-            document.body.classList.add('loaded');
-        });
-    </script> --}}
 </body>
 </html>

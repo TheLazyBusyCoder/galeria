@@ -75,4 +75,16 @@ class User extends Authenticatable
         return $this->belongsToMany(User::class, 'follows', 'followed_id', 'follower_id');
     }
 
+    public function sentMessages()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    public function receivedMessages()
+    {
+        return $this->belongsToMany(Message::class, 'message_recipients', 'recipient_id', 'message_id')
+                    ->withPivot('read_at', 'deleted_at')
+                    ->withTimestamps();
+    }
+
 }

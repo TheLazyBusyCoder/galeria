@@ -113,6 +113,15 @@
                     @if($photoId)
                         <a href="{{ route('photos.view', $photoId) }}" class="link">View Post</a>
                     @endif
+                @elseif($type === 'message')
+                    @if (!$notification->read_at)
+                        <form action="{{ route('notifications.read') }}" method="POST" style="display:inline;">
+                            @csrf
+                            {{-- Mark as read --}}
+                            <input type="hidden" name="id" value="{{$notification->id}}">
+                            <button class="button" type="submit">Mark as Read</button>
+                        </form>
+                    @endif
                 @elseif($type === 'follow')
                     @php
                         $followId = $notification->data['extra']['follow_id'] ?? null;
@@ -131,11 +140,44 @@
                             <button class="button" type="submit">Reject</button>
                         </form>
                     @elseif($follow && $follow->status === 'accepted')
-                        <span class="text-success">Follow request accepted</span>
+                        <form action="{{ route('notifications.read') }}" method="POST" style="display:inline;">
+                            @csrf
+                            {{-- Mark as read --}}
+                            <input type="hidden" name="id" value="{{$notification->id}}">
+                            <button class="button" type="submit">Mark as Read</button>
+                        </form>
                     @elseif($follow && $follow->status === 'rejected')
-                        <span class="text-danger">Follow request rejected</span>
+                        <form action="{{ route('notifications.read') }}" method="POST" style="display:inline;">
+                            @csrf
+                            {{-- Mark as read --}}
+                            <input type="hidden" name="id" value="{{$notification->id}}">
+                            <button class="button" type="submit">Mark as Read</button>
+                        </form>
                     @else
-                        <span class="text-muted">Follow request not found</span>
+                        <form action="{{ route('notifications.read') }}" method="POST" style="display:inline;">
+                            @csrf
+                            {{-- Mark as read --}}
+                            <input type="hidden" name="id" value="{{$notification->id}}">
+                            <button class="button" type="submit">Mark as Read</button>
+                        </form>
+                    @endif
+                @elseif ('follow_accept')
+                @if (!$notification->read_at)
+                    <form action="{{ route('notifications.read') }}" method="POST" style="display:inline;">
+                        @csrf
+                        {{-- Mark as read --}}
+                        <input type="hidden" name="id" value="{{$notification->id}}">
+                        <button class="button" type="submit">Mark as Read</button>
+                    </form>
+                @endif
+                @elseif ('follow_rejected')
+                    @if (!$notification->read_at)
+                        <form action="{{ route('notifications.read') }}" method="POST" style="display:inline;">
+                            @csrf
+                            {{-- Mark as read --}}
+                            <input type="hidden" name="id" value="{{$notification->id}}">
+                            <button class="button" type="submit">Mark as Read</button>
+                        </form>
                     @endif
                 @endif
             </div>
