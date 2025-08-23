@@ -56,6 +56,7 @@ Route::middleware('auth')->group(function () {
 
     // Notifications
     Route::get('notifications' , [NotificationController::class , 'index'])->name('notifications');
+    Route::get('notifications/count' , [NotificationController::class , 'count'])->name('notifications.count');
     Route::post('/notifications/read', [NotificationController::class, 'markRead'])->name('notifications.read');
 
     // Follow / Unfollow
@@ -73,6 +74,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/messages/{user}', [MessageController::class, 'conversation'])->name('messages.conversation');
     Route::post('/messages/{user}', [MessageController::class, 'send'])->name('messages.send');
     Route::post('/messages/{message}/read', [MessageController::class, 'markRead'])->name('messages.read');
+
+    // Live chatting
+    Route::get('/messages/fetch/{user}', [MessageController::class, 'fetch'])->name('messages.fetch');
+
 
     // Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

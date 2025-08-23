@@ -18,6 +18,6 @@ class DatabaseSeeder extends Seeder
         User::factory(10)->create();
 
         // Create 50 photos linked to random users
-        PhotoModel::factory(50)->create();
+        PhotoModel::factory(200)->create();
     }
 }

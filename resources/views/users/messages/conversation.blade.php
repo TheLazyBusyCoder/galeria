@@ -128,4 +128,76 @@
 @endsection
 
 @section('js')
+    <script>
+        function formatTimestamp(datetime) {
+            const d = new Date(datetime);
+
+            // Hours in 12-hour format
+            let hours = d.getHours();
+            const minutes = d.getMinutes().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // 0 => 12
+
+            // Day + Month
+            const day = d.getDate();
+            const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+            const month = monthNames[d.getMonth()];
+
+            return `${hours}:${minutes} ${ampm}, ${day} ${month}`;
+        }
+
+        function updateMessages() {
+            const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            fetch('{{ route('messages.fetch', $user->id) }}', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': token
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                const convo = document.querySelector('.conversation');
+                convo.innerHTML = ''; // clear existing messages
+
+                if (data.messages.length === 0) {
+                    convo.innerHTML = '<div>No messages yet.</div>';
+                    return;
+                }
+
+                data.messages.reverse().forEach(message => {
+                    const div = document.createElement('div');
+                    div.classList.add('message');
+                    div.classList.add(message.sender_id == {{ auth()->id() }} ? 'sent' : 'received');
+
+                    if (message.type === 'text') {
+                        div.textContent = message.content;
+                    } else if (message.type === 'file') {
+                        message.attachments.forEach(att => {
+                            const a = document.createElement('a');
+                            a.href = '/storage/' + att.url;
+                            a.target = '_blank';
+                            a.textContent = att.type + ' file';
+                            div.appendChild(a);
+                        });
+                    }
+
+                    const small = document.createElement('small');
+                    small.classList.add('timestamp', message.sender_id == {{ auth()->id() }} ? 'sent' : 'received');
+                    small.textContent = formatTimestamp(message.created_at);
+                    div.appendChild(small);
+
+                    convo.appendChild(div);
+                });
+
+                convo.scrollTop = convo.scrollHeight; // scroll to bottom
+            })
+            .catch(err => console.error(err));
+        }
+
+        // poll every 1 second
+        setInterval(updateMessages, 2000);
+    </script>
 @endsection

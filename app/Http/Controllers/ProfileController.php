@@ -51,7 +51,7 @@ class ProfileController extends Controller
         $user = User::findOrFail($id);
 
         // Directly get the users this user follows (they are already User models)
-        $followings = $user->followings()->get();
+        $followings = $user->followings()->where('status' , 'accepted')->get();
 
         return view('users.profile.following', compact('user', 'followings'));
     }
@@ -61,7 +61,7 @@ class ProfileController extends Controller
         $user = User::findOrFail($id);
 
         // Directly get the users who follow this user
-        $followers = $user->followers()->get();
+        $followers = $user->followers()->where('status' , 'accepted')->get();
 
         return view('users.profile.followers', compact('user', 'followers'));
     }

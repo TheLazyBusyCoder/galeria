@@ -46,6 +46,15 @@
     margin-top: 1rem;
     color: var(--color-text-muted);
 }
+
+.notification-count {
+    background: red;
+    color: var(--color-text-inverse);
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 5px 8px;
+    border-radius: 50%;
+}
 </style>
 
 @endsection
@@ -62,11 +71,12 @@
                     @else
                         <div class="no-avatar">No Pic</div>
                     @endif
-
-                    <a href="{{ route('messages.conversation', $convUser->id) }}">
+                    <a href="{{ route('messages.conversation', $convUser->id) }}" style="position: relative;">
                         {{ $convUser->name }}
+                        @if($convUser->unread_count > 0)
+                            <span class="notification-count">{{ $convUser->unread_count ?? 0 }}</span>
+                        @endif
                     </a>
-
                 </div>
             @empty
                 <p style="text-align:center; color:#777;">No conversations yet.</p>

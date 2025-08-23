@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -23,16 +24,24 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        // Correct folder
+        $files = File::files(public_path('storage/profiles'));
+
+        // Pick one random file
+        $randomFile = collect($files)->random();
+
+        // Relative path for DB
+        $relativePath = '/profiles/' . $randomFile->getFilename();
 
         return [
             'name' => $this->faker->name(),
             'username' => $this->faker->unique()->userName(),
             'email' => $this->faker->unique()->safeEmail(),
-            'account_type' => $this->faker->randomElement(['public' , 'private']),
+            'account_type' => $this->faker->randomElement(['public', 'private']),
             'email_verified_at' => now(),
             'password' => Hash::make('password'), // default password
             'remember_token' => Str::random(10),
-            'profile_picture' => 'https://picsum.photos/640/480?random=' . $this->faker->unique()->numberBetween(1, 10000),
+            'profile_picture' => $relativePath,
         ];
     }
 

@@ -11,23 +11,22 @@ class FeedController extends Controller
     {
         $search = $req->get('search');
 
-        $photos = PhotoModel::with('user') // eager load user for name/profile pic
-            ->withCount('likes') // count likes
-            ->whereHas('user', function ($q) {
-                $q->where('account_type', 'public'); // only public accounts
-            })
+        $seed = request()->get('seed', rand()); // keep same seed per pagination
+        $photos = PhotoModel::with('user')
+            ->withCount('likes')
+            ->whereHas('user', fn($q) => $q->where('account_type', 'public'))
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
-                    $q->whereHas('user', function ($q2) use ($search) {
+                    $q->whereHas('user', fn($q2) => 
                         $q2->where('name', 'like', "%{$search}%")
-                        ->orWhere('username', 'like', "%{$search}%");
-                    })
+                        ->orWhere('username', 'like', "%{$search}%"))
                     ->orWhere('caption', 'like', "%{$search}%");
                 });
             })
-            ->latest()
-            ->paginate(10) // show 10 per page
-            ->withQueryString(); // keep search term in pagination links
+            ->orderByRaw("RAND($seed)") // stable random
+            ->paginate(10)
+            ->appends(['search' => $search, 'seed' => $seed]); // keep seed in URL
+
 
         return view('users.feed.index', compact('photos', 'search'));
     }

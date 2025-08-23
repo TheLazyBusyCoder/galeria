@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ Auth::user()->username }} </title>
     @if(Auth::user()->profile_picture)
         <link rel="icon" type="image/png" 
@@ -82,10 +83,19 @@
             border-radius: 50%;
         }
     </style>
+    <style>
+        .badge {
+            display: none;
+            font-size: 0.5rem;
+            padding: 3px 5px;
+            right: 10px;
+        }
+    </style>
     @yield('css')
 </head>
 <body>
     <div class="layout">
+        {{-- Navbar --}}
         <nav class="navbar">
             <div class="nav-brand">
                 <h1 style="color: var(--color-primary);">Galeria</h1>
@@ -96,9 +106,7 @@
                     @php
                         $unreadCount = auth()->user()->unreadNotifications()->count();
                     @endphp
-                    @if($unreadCount > 0)
-                        <span class="badge">{{ $unreadCount }}</span>
-                    @endif
+                    <span id="unreadCount" class="badge">{{ $unreadCount }}</span>
                 </a>
 
                 <a href="{{ route('feed.index') }}" class="{{ request()->routeIs(['feed.index']) ? 'active' : '' }}">
@@ -107,8 +115,9 @@
                 <a href="{{ route('social.index') }}" class="{{ request()->routeIs(['social.index'  , 'users.show']) ? 'active' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users-icon lucide-users"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/></svg>
                 </a>
-                <a href="{{ route('messages.index') }}" class="{{ request()->routeIs(['messages.index' , 'messages.conversation']) ? 'active' : '' }}">
+                <a href="{{ route('messages.index') }}" class=" nav-link {{ request()->routeIs(['messages.index' , 'messages.conversation']) ? 'active' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mails-icon lucide-mails"><path d="M17 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 1-1.732"/><path d="m22 5.5-6.419 4.179a2 2 0 0 1-2.162 0L7 5.5"/><rect x="7" y="3" width="15" height="12" rx="2"/></svg>
+                    <span id="inboxCount" class="badge"></span>
                 </a>
                 <a href="{{ route('profile.view') }}" class="{{ request()->routeIs(['profile.view' , 'profile.edit' , 'profile.followers' , 'profile.following']) ? 'active' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-icon lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -131,6 +140,47 @@
             <p>&copy; <script>document.write(new Date().getFullYear())</script> Galeria — thel3ox</p>
         </footer>
 
+        <script>
+            function getNotificationCount() {
+                const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                fetch('{{ route('notifications.count') }}', {
+                    method: 'GET', // or GET if your route allows
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': token, // Laravel expects this header
+                    },
+                })
+                .then(res => res.json())
+                .then(data => {
+                    const countEl = document.getElementById('unreadCount');
+                    const inboxCount = document.getElementById('inboxCount');
+                    console.log(data.count , data.inboxCount);
+
+                    if (data.count && data.count > 0) {
+                        countEl.textContent = data.count; // set the number
+                        inboxCount.textContent = data.inboxCount; // set the number
+                        countEl.style.display = 'inline-block'; // unhide
+                        inboxCount.style.display = 'inline-block'; // unhide
+                    } else {
+                        countEl.style.display = 'none';
+                    }
+
+                    if (data.inboxCount && data.inboxCount > 0) {
+                        inboxCount.textContent = data.inboxCount; // set the number
+                        inboxCount.style.display = 'inline-block'; // unhide
+                    } else {
+                        inboxCount.style.display = 'none';
+                    }
+                })
+                .catch(err => console.error(err));
+            }
+
+            getNotificationCount();
+
+            // Optional: poll every X seconds
+            setInterval(getNotificationCount, 2000); // every 2 seconds
+        </script>
         @yield('js')
     </div>
 </body>

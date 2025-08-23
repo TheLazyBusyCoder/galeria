@@ -6,9 +6,37 @@ use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class MessageController extends Controller
 {
+    public function fetch(User $user)
+    {
+        $authId = auth()->id();
+
+        // Check permission: only fetch if allowed
+        if ($user->account_type === 'private' && !$user->followers()->where('follower_id', $authId)->exists()) {
+            abort(403, 'You cannot view this chat.');
+        }
+
+        // Fetch messages between logged-in user and the other user
+        $messages = Message::where(function ($q) use ($authId, $user) {
+                $q->where('sender_id', $authId)
+                ->whereHas('recipients', fn($r) => $r->where('recipient_id', $user->id));
+            })
+            ->orWhere(function ($q) use ($authId, $user) {
+                $q->where('sender_id', $user->id)
+                ->whereHas('recipients', fn($r) => $r->where('recipient_id', $authId));
+            })
+            ->with('attachments', 'sender') // include attachments and sender info
+            ->orderBy('created_at', 'asc') // ascending order like conversation()
+            ->get();
+
+        return response()->json([
+            'messages' => $messages
+        ]);
+    }
+
     /**
      * Show all 1:1 conversations (inbox)
      */
@@ -16,15 +44,34 @@ class MessageController extends Controller
     {
         $userId = Auth::id();
 
-        // Get all users that current user has messages with
         $conversations = User::whereHas('receivedMessages', function ($q) use ($userId) {
-            $q->where('sender_id', $userId);
-        })->orWhereHas('sentMessages', function ($q) use ($userId) {
-            $q->where('sender_id', '!=', $userId);
-        })->get();
+                // I sent them a message
+                $q->where('sender_id', $userId);
+            })
+            ->orWhereHas('sentMessages', function ($q) use ($userId) {
+                // They sent me a message -> check via pivot table
+                $q->whereHas('recipients', function ($r) use ($userId) {
+                    $r->where('recipient_id', $userId);
+                });
+            })
+            ->get()
+            ->map(function ($convUser) use ($userId) {
+                // Add unread count dynamically
+                $convUser->unread_count = Message::where('sender_id', $convUser->id)
+                    ->whereHas('recipients', function ($q) use ($userId) {
+                        $q->where('recipient_id', $userId)
+                        ->whereNull('read_at');
+                    })
+                    ->count();
+
+                return $convUser;
+            });
+
+        // dd($conversations);
 
         return view('users.messages.index', compact('conversations'));
     }
+
 
     /**
      * Show messages between logged-in user and a specific user
@@ -46,6 +93,21 @@ class MessageController extends Controller
             $q->where('sender_id', $user->id)
               ->whereHas('recipients', fn($r) => $r->where('recipient_id', $authId));
         })->with('attachments', 'sender')->orderBy('created_at', 'asc')->get();
+
+        // Update the inbox notfication
+        auth()->user()->notifications()
+            ->whereNull('read_at')
+            ->where('data->type', 'message')
+            ->where('data->from_user_id', $user->id)
+            ->update(['read_at' => now()]);
+
+        // ✅ Mark as read all messages received from this user
+        DB::table('message_recipients')
+            ->join('messages', 'message_recipients.message_id', '=', 'messages.id')
+            ->where('messages.sender_id', $user->id)     // messages from that user
+            ->where('message_recipients.recipient_id', $authId) // to me
+            ->whereNull('message_recipients.read_at')
+            ->update(['message_recipients.read_at' => now()]);
 
         return view('users.messages.conversation', compact('user', 'messages'));
     }
@@ -83,18 +145,6 @@ class MessageController extends Controller
             text: Auth::user()->name . ' send you a message',
             fromUserId: $authId,
         ));
-
-        // Optional: handle attachment
-        if ($request->hasFile('attachment')) {
-            $file = $request->file('attachment');
-            $path = $file->store('messages', 'public');
-
-            $message->attachments()->create([
-                'type' => $file->getClientOriginalExtension() === 'mp4' ? 'video' : 'image',
-                'url' => $path,
-                'size' => $file->getSize(),
-            ]);
-        }
 
         return back()->with('success', 'Message sent!');
     }

@@ -7,9 +7,22 @@ use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
-    public function index() {
-        return view('users.notifications.index');
+    public function index()
+    {
+        $user = auth()->user();
+
+        // Mark all unread notifications as read except type 'message'
+        $user->notifications()
+            ->whereNull('read_at')
+            ->where('data->type', '!=', 'message')
+            ->update(['read_at' => now()]);
+
+        // Pass all notifications to the view
+        $notifications = $user->notifications()->latest()->get();
+
+        return view('users.notifications.index', compact('notifications'));
     }
+
     public function markRead(Request $req)
     {
         $user = Auth::user();
@@ -21,5 +34,27 @@ class NotificationController extends Controller
         $notification->markAsRead();
 
         return back()->with('status', 'Notification marked as read.');
+    }
+    public function count()
+    {
+        $user = Auth::user(); // get the currently logged-in user
+
+        // count unread notifications excluding messages
+        $unreadCount = $user->notifications()
+            ->whereNull('read_at')
+            ->where('data->type', '!=', 'message')
+            ->count();
+
+        // count unread message notifications
+        $countInbox = $user->notifications()
+            ->whereNull('read_at')
+            ->where('data->type', 'message')
+            ->count();
+
+        // return JSON response
+        return response()->json([
+            'count' => $unreadCount,
+            'inboxCount' => $countInbox,
+        ]);
     }
 }
