@@ -27,7 +27,7 @@
     }
     .follower-item a {
         text-decoration: none;
-        color: #333;
+        color: var(--color-text);
         font-weight: 500;
     }
     .back-link {

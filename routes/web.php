@@ -9,6 +9,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\SocialController;
 use App\Http\Controllers\UserController;
 use App\Models\User;
@@ -78,6 +79,9 @@ Route::middleware('auth')->group(function () {
     // Live chatting
     Route::get('/messages/fetch/{user}', [MessageController::class, 'fetch'])->name('messages.fetch');
 
+    // Settings
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
+    Route::post('/settings/theme', [SettingsController::class, 'updateTheme'])->name('settings.theme.update');
 
     // Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

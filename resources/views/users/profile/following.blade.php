@@ -7,6 +7,7 @@
         margin: 0 auto;
         padding: 1rem;
     }
+
     .following-list h1 {
         text-align: center;
         margin-bottom: 1rem;
@@ -27,7 +28,7 @@
     }
     .following-item a {
         text-decoration: none;
-        color: #333;
+        color: var(--color-text);
         font-weight: 500;
     }
     .back-link {
@@ -63,6 +64,6 @@
         <p style="text-align:center; color:#777;">Not following anyone</p>
     @endforelse
 
-    <a href="{{ route('profile.view', $user->id) }}" class="back-link">⬅ Back to Profile</a>
+    <a href="{{ route('profile.view', $user->id) }}" class="link">⬅ Back to Profile</a>
 </div>
 @endsection
