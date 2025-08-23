@@ -33,7 +33,7 @@ html , body {
 }
 
 /* Optional: auto-dark mode fallback */
-/* @media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: dark) {
   :root {
 
     --color-bg: #1a1d23;        
@@ -59,7 +59,7 @@ html , body {
     --color-shadow: rgba(0, 0, 0, 0.25);
     --color-highlight: rgba(255, 223, 88, 0.4); 
   }
-} */
+}
 
 [data-theme="dark"] {
   /* Brand / Identity */

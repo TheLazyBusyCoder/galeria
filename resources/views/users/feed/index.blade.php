@@ -28,9 +28,9 @@
         }
         .pager-btn{
             padding:6px 10px;border:1px solid #ddd;border-radius:6px;
-            text-decoration:none;color:#333;font-size:14px;line-height:1
+            text-decoration:none;color:var(--color-text);font-size:14px;line-height:1
         }
-        .pager-btn:hover{background:#f5f5f5}
+        .pager-btn:hover{background:var(--color-bg);}
         .pager-btn.disabled{opacity:.5;pointer-events:none}
         .pager-info{font-size:14px;color:#666;padding:0 6px}
     </style>
