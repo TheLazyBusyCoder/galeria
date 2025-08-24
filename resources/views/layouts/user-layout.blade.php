@@ -10,12 +10,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ Auth::user()->username }} </title>
-    @if(Auth::user()->profile_picture)
-        <link rel="icon" type="image/png" 
-            href="{{ asset('storage/' . Auth::user()->profile_picture) }}">
-    @else
-        <link rel="icon" type="image/png" href="https://via.placeholder.com/32">
-    @endif
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon.png') }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('favicon.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('favicon.png') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.png') }}">
     <link rel="stylesheet" href="{{ asset('theme.css') }}">
     <style>
         .navbar {
@@ -162,7 +160,7 @@
                 .then(data => {
                     const countEl = document.getElementById('unreadCount');
                     const inboxCount = document.getElementById('inboxCount');
-                    console.log(data.count , data.inboxCount);
+                    // console.log(data.count , data.inboxCount);
 
                     if (data.count && data.count > 0) {
                         countEl.textContent = data.count; // set the number

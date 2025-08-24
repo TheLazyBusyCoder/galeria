@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class PhotoModel extends Model
 {
@@ -22,6 +23,21 @@ class PhotoModel extends Model
         'caption',
         'likes_count',
     ];
+
+    protected static function booted()
+    {
+        static::creating(function ($photo) {
+            if (empty($photo->uuid)) {
+                $photo->uuid = (string) Str::uuid();
+            }
+        });
+    }
+
+    // Route model binding by uuid instead of id
+    public function getRouteKeyName()
+    {
+        return 'uuid';
+    }
 
     public function user()
     {

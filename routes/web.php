@@ -22,14 +22,14 @@ Route::get('/', function () {
     if(Auth::check()) {
         return redirect()->route('profile.view');
     }
-    return redirect()->route('signup');
+    return redirect()->route('login');
 });
 
 // Auth routes
 Route::get('/signup', [AuthController::class, 'showSignupForm'])->name('signup');
-Route::post('/signup', [AuthController::class, 'signup']);
+Route::post('/signup', [AuthController::class, 'signup'])->middleware('throttle:3,10');
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:3,5');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware('auth')->group(function () {

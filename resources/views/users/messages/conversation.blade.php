@@ -140,7 +140,7 @@
 
     <div class="convo-form">
         {{-- text form --}}
-        <form action="{{ route('messages.send', $user->id) }}" method="POST" class="send-message" enctype="multipart/form-data">
+        <form action="{{ route('messages.send', $user->ulid) }}" method="POST" class="send-message" enctype="multipart/form-data">
             @csrf
             <input class="input" type="text" name="content" placeholder="Type a message">
             <button class="button" type="submit">Send</button>
@@ -226,7 +226,7 @@
     let firstLoad = true; // flag to ensure scroll only runs once
 
     function updateMessages() {
-        fetch('{{ route('messages.fetch', $user->id) }}')
+        fetch('{{ route('messages.fetch', $user->ulid) }}')
             .then(res => res.json())
             .then(data => {
                 const convo = document.querySelector('.conversation');

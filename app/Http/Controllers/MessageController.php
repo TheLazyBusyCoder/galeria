@@ -69,8 +69,6 @@ class MessageController extends Controller
                 return $convUser;
             });
 
-        // dd($conversations);
-
         return view('users.messages.index', compact('conversations'));
     }
 

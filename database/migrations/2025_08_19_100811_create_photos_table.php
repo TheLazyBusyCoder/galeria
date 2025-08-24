@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('photos', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique(); // public identifier for sharing URLs
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // photo belongs to user
             $table->string('image_path'); // store the file path
             $table->string('caption')->nullable(); // optional caption

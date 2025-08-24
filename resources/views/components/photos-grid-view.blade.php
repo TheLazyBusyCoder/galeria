@@ -6,7 +6,7 @@
         <div class="photo-card">
 
             <!-- Photo -->
-            <a href="{{ route('photos.view', ['photo_id' => $photo->id]) }}">
+            <a href="{{ route('photos.view', ['photo_id' => $photo->uuid]) }}">
                 <img src="{{ asset('storage/' . $photo->image_path) }}" 
                      alt="Photo" class="photo-img">
             </a>

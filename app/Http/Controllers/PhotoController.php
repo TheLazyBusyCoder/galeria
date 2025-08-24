@@ -21,7 +21,10 @@ class PhotoController extends Controller
     }
 
     public function view($photo_id) {
-        $photo = PhotoModel::withCount('likes')->find($photo_id);
+        $photo = PhotoModel::withCount('likes')
+        ->where('uuid', $photo_id)
+        ->firstOrFail();
+        // dd($photo);
         return view('users.photos.view', compact('photo'));
     }
 

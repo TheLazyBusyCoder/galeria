@@ -98,7 +98,7 @@
                                 <button type="submit" class="btn btn-unfollow">Unfollow</button>
                             </form>
                             {{-- Redirect to conversation --}}
-                            <a href="{{ route('messages.conversation', $user->id) }}" class="link">Message</a>
+                            <a href="{{ route('messages.conversation', $user->ulid) }}" class="link">Message</a>
                         @elseif($followRecord->status === 'pending')
                             {{-- Request sent --}}
                             Request Sent, Please wait

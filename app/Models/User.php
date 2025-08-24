@@ -3,14 +3,31 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
+
+    protected static function booted()
+    {
+        static::creating(function ($user) {
+            if (empty($user->ulid)) {
+                $user->ulid = (string) Str::ulid();
+            }
+        });
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'ulid'; // or 'ulid' if that’s your column name
+    }
 
     /**
      * The attributes that are mass assignable.

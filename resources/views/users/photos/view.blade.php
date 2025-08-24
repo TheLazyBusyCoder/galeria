@@ -143,7 +143,7 @@
                 <p class="caption">{{ $photo->caption }}</p>
             @endif
             @if(!$photo->likes->contains('user_id', auth()->id()))
-                <form action="{{ route('photos.like', $photo->id) }}" method="POST">
+                <form action="{{ route('photos.like', $photo->uuid) }}" method="POST">
                     @csrf
                     <p>
                         <small>{{ $photo->likes_count }} likes</small><br>
@@ -185,7 +185,7 @@
 
             {{-- Comment Form --}}
             <div class="comment-form">
-                <form action="{{ route('photos.comment', $photo->id) }}" method="POST">
+                <form action="{{ route('photos.comment', $photo->uuid) }}" method="POST">
                     @csrf
                     <input name="content" style="margin-bottom: 10px;" required placeholder="Add a comment..."  />
                     <button type="submit">Post Comment</button>

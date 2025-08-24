@@ -71,7 +71,7 @@
                     @else
                         <div class="no-avatar">No Pic</div>
                     @endif
-                    <a href="{{ route('messages.conversation', $convUser->id) }}" style="position: relative;">
+                    <a href="{{ route('messages.conversation', $convUser->ulid) }}" style="position: relative;">
                         {{ $convUser->name }}
                         @if($convUser->unread_count > 0)
                             <span class="notification-count">{{ $convUser->unread_count ?? 0 }}</span>
