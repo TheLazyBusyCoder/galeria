@@ -153,7 +153,7 @@
                     </p>
                 </form>
             @else
-                Liked
+                {{ $photo->likes_count }} Likes
             @endif
         </div>
 

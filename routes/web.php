@@ -79,6 +79,10 @@ Route::middleware('auth')->group(function () {
     // Live chatting
     Route::get('/messages/fetch/{user}', [MessageController::class, 'fetch'])->name('messages.fetch');
 
+    // Voice chatting: 
+    Route::post('/messages/{user}/voice', [MessageController::class, 'sendVoice'])->name('messages.sendVoice');
+
+
     // Settings
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
     Route::post('/settings/theme', [SettingsController::class, 'updateTheme'])->name('settings.theme.update');

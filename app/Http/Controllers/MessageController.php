@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Message;
+use App\Models\MessageAttachment;
+use App\Models\MessageRecipient;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -92,7 +94,7 @@ class MessageController extends Controller
         })->orWhere(function ($q) use ($authId, $user) {
             $q->where('sender_id', $user->id)
               ->whereHas('recipients', fn($r) => $r->where('recipient_id', $authId));
-        })->with('attachments', 'sender')->orderBy('created_at', 'asc')->get();
+        })->with('attachments', 'sender')->orderBy('created_at', 'desc')->get();
 
         // Update the inbox notfication
         auth()->user()->notifications()
@@ -165,5 +167,44 @@ class MessageController extends Controller
         $message->recipients()->updateExistingPivot($authId, ['read_at' => now()]);
 
         return response()->json(['success' => true]);
+    }
+
+    // NEW: voice message
+    public function sendVoice(Request $request, $userId)
+    {
+        $request->validate([
+            'voice' => 'required|file|mimes:mp3,wav,ogg,webm|max:20480', // max 20MB
+            'duration' => 'nullable|integer',
+        ]);
+
+        $path = $request->file('voice')->store('voice', 'public');
+
+        // create message
+        $message = Message::create([
+            'sender_id' => auth()->id(),
+            'type' => 'voice',
+            'content' => null,
+        ]);
+
+        // create attachment
+        MessageAttachment::create([
+            'message_id' => $message->id,
+            'type' => 'audio',
+            'url' => $path,
+            'size' => $request->file('voice')->getSize(),
+            'metadata' => json_encode([
+                'duration' => $request->duration,
+                'format' => $request->file('voice')->getClientOriginalExtension(),
+                'mime' => $request->file('voice')->getMimeType(),
+            ]),
+        ]);
+
+        // link to recipient
+        MessageRecipient::create([
+            'message_id' => $message->id,
+            'recipient_id' => $userId,
+        ]);
+
+        return response()->json(['success' => true, 'message_id' => $message->id]);
     }
 }
