@@ -1,0 +1,153 @@
+///////////////////
+// About the app
+
+- full stack web app where users can upload images
+- follow friends
+- set account type to public / private
+- like others images 
+- comment on others posts 
+- receive notification 
+- view others profile 
+
+///////////////////
+// Tech Used 
+
+frontend: html,css,js 
+backend: laravel 
+database: mysql
+
+//////////////////
+// Roles and functions
+
+Roles: 
+- User 
+
+Features: 
+- User can create account using username and password
+- Profile page 
+-- uploaded photos
+-- profile details
+-- edit profile 
+--- profile picture 
+--- email 
+--- account type "public" , "private"
+- Settings page 
+-- user can switch light/dark theme 
+- Upload image page
+-- user can upload images from this page with caption
+- Inbox page 
+-- user can see received messages in this page 
+- Social page
+-- user can search other users from this page 
+--- see images of public account 
+--- follow / unfollow users. 
+- Feed page 
+-- User can see public posts in this page (click to view)
+-- user can like , comment 
+
+////////////////////
+// Tables and columns  
+
+[
+  {
+    "type": "header",
+    "version": "5.2.1deb3",
+    "comment": "Export to JSON plugin for PHPMyAdmin"
+  },
+  {
+    "type": "database",
+    "name": "information_schema"
+  },
+  {
+    "type": "table",
+    "name": "columns",
+    "database": "information_schema",
+    "data": [
+      {
+        "Table Name": "cache",
+        "Column Count": "3",
+        "Columns (Name Type)": "key varchar(255), value mediumtext, expiration int"
+      },
+      {
+        "Table Name": "cache_locks",
+        "Column Count": "3",
+        "Columns (Name Type)": "key varchar(255), owner varchar(255), expiration int"
+      },
+      {
+        "Table Name": "comments",
+        "Column Count": "6",
+        "Columns (Name Type)": "id bigint unsigned, user_id bigint unsigned, photo_id bigint unsigned, content text, created_at timestamp, updated_at timestamp"
+      },
+      {
+        "Table Name": "failed_jobs",
+        "Column Count": "7",
+        "Columns (Name Type)": "id bigint unsigned, uuid varchar(255), connection text, queue text, payload longtext, exception longtext, failed_at timestamp"
+      },
+      {
+        "Table Name": "follows",
+        "Column Count": "6",
+        "Columns (Name Type)": "id bigint unsigned, follower_id bigint unsigned, followed_id bigint unsigned, status enum('pending','accepted','rejected'), created_at timestamp, updated_at timestamp"
+      },
+      {
+        "Table Name": "job_batches",
+        "Column Count": "10",
+        "Columns (Name Type)": "id varchar(255), name varchar(255), total_jobs int, pending_jobs int, failed_jobs int, failed_job_ids longtext, options mediumtext, cancelled_at int, created_at int, finished_at int"
+      },
+      {
+        "Table Name": "jobs",
+        "Column Count": "7",
+        "Columns (Name Type)": "id bigint unsigned, queue varchar(255), payload longtext, attempts tinyint unsigned, reserved_at int unsigned, available_at int unsigned, created_at int unsigned"
+      },
+      {
+        "Table Name": "likes",
+        "Column Count": "5",
+        "Columns (Name Type)": "id bigint unsigned, user_id bigint unsigned, photo_id bigint unsigned, created_at timestamp, updated_at timestamp"
+      },
+      {
+        "Table Name": "message_attachments",
+        "Column Count": "9",
+        "Columns (Name Type)": "id bigint unsigned, message_id bigint unsigned, type enum('file','image','video','audio'), url varchar(255), thumbnail_url varchar(255), size bigint, metadata json, created_at timestamp, updated_at timestamp"
+      },
+      {
+        "Table Name": "message_recipients",
+        "Column Count": "7",
+        "Columns (Name Type)": "id bigint unsigned, message_id bigint unsigned, recipient_id bigint unsigned, read_at timestamp, deleted_at timestamp, created_at timestamp, updated_at timestamp"
+      },
+      {
+        "Table Name": "messages",
+        "Column Count": "6",
+        "Columns (Name Type)": "id bigint unsigned, sender_id bigint unsigned, type enum('text','file','voice'), content text, created_at timestamp, updated_at timestamp"
+      },
+      {
+        "Table Name": "migrations",
+        "Column Count": "3",
+        "Columns (Name Type)": "id int unsigned, migration varchar(255), batch int"
+      },
+      {
+        "Table Name": "notifications",
+        "Column Count": "8",
+        "Columns (Name Type)": "id char(36), type varchar(255), notifiable_type varchar(255), notifiable_id bigint unsigned, data text, read_at timestamp, created_at timestamp, updated_at timestamp"
+      },
+      {
+        "Table Name": "password_reset_tokens",
+        "Column Count": "3",
+        "Columns (Name Type)": "email varchar(255), token varchar(255), created_at timestamp"
+      },
+      {
+        "Table Name": "photos",
+        "Column Count": "8",
+        "Columns (Name Type)": "id bigint unsigned, uuid char(36), user_id bigint unsigned, image_path varchar(255), caption varchar(255), likes_count bigint unsigned, created_at timestamp, updated_at timestamp"
+      },
+      {
+        "Table Name": "sessions",
+        "Column Count": "6",
+        "Columns (Name Type)": "id varchar(255), user_id bigint unsigned, ip_address varchar(45), user_agent text, payload longtext, last_activity int"
+      },
+      {
+        "Table Name": "users",
+        "Column Count": "13",
+        "Columns (Name Type)": "id bigint unsigned, ulid char(26), name varchar(255), username varchar(255), account_type varchar(255), email varchar(255), profile_picture varchar(255), email_verified_at timestamp, password varchar(255), remember_token varchar(100), created_at timestamp, updated_at timestamp, theme varchar(255)"
+      }
+    ]
+  }
+]
